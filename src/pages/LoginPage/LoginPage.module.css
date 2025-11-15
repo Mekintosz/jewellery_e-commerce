@@ -1,0 +1,38 @@
+.page {
+  display: grid;
+  gap: 2rem;
+  max-width: 28rem;
+}
+
+.page__header {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.page__title {
+  margin: 0;
+  font-size: clamp(2.2rem, 3vw, 2.6rem);
+}
+
+.page__subtitle {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+.page__form {
+  display: grid;
+  gap: 1.25rem;
+  padding: 2rem;
+  border-radius: 1.75rem;
+  background-color: var(--color-surface-primary);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+}
+
+.page__footer {
+  color: var(--color-text-secondary);
+}
+
+.page__footer a {
+  color: var(--color-primary);
+  font-weight: 600;
+}
