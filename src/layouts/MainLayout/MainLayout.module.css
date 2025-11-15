@@ -1,0 +1,16 @@
+.layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-surface-background);
+  color: var(--color-text-primary);
+}
+
+.layout__breadcrumbs {
+  padding: 0.75rem clamp(1rem, 4vw, 3rem) 0;
+}
+
+.layout__main {
+  flex: 1;
+  padding: 2rem clamp(1rem, 4vw, 3rem);
+}
