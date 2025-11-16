@@ -1,0 +1,92 @@
+import { ChangeEvent, useMemo, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import styles from './Header.module.css';
+import { Logo } from '../../common/Logo/Logo';
+import { Badge } from '../../ui/Badge/Badge';
+import { Navbar } from '../Navbar/Navbar';
+import { useCart } from '../../../context/CartContext';
+import { useAuth } from '../../../context/AuthContext';
+import { MobileMenu } from '../MobileMenu/MobileMenu';
+import { useUI } from '../../../context/UIContext';
+import { MiniCart } from '../../cart/MiniCart/MiniCart';
+import { useProducts } from '../../../context/ProductContext';
+
+export const Header = () => {
+  const { items } = useCart();
+  const { user, isAuthenticated } = useAuth();
+  const { openModal } = useUI();
+  const { filters, setFilters } = useProducts();
+  const navigate = useNavigate();
+  const [isMiniCartOpen, setMiniCartOpen] = useState(false);
+  const cartCount = useMemo(() => items.reduce((total, item) => total + item.quantity, 0), [items]);
+
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const query = event.target.value;
+    setFilters({
+      ...filters,
+      query
+    });
+    navigate(`/products?query=${encodeURIComponent(query)}`);
+  };
+
+  const handleCartToggle = () => {
+    setMiniCartOpen((prev) => !prev);
+  };
+
+  return (
+    <header className={styles.header}>
+      <div className={styles['header__inner']}>
+        <div className={styles['header__left']}>
+          <button
+            className={styles['header__menu']}
+            aria-label="Open navigation"
+            onClick={() => openModal('menu')}
+          >
+            ☰
+          </button>
+          <Logo />
+          <Navbar />
+        </div>
+        <div className={styles['header__search']}>
+          <span className={styles['header__search-icon']} aria-hidden="true">
+            🔍
+          </span>
+          <input
+            className={styles['header__search-field']}
+            placeholder="Search jewellery"
+            aria-label="Search jewellery"
+            onChange={handleSearchChange}
+            defaultValue={filters.query}
+          />
+        </div>
+        <div className={styles['header__actions']}>
+          <Link to="/wishlist" className={styles['header__icon']} aria-label="View wishlist">
+            Wishlist
+          </Link>
+          <button type="button" className={styles['header__icon']} onClick={handleCartToggle} aria-label="Open cart">
+            Bag
+            {cartCount > 0 ? (
+              <Badge className={styles['header__badge']} variant="default">
+                {cartCount}
+              </Badge>
+            ) : null}
+          </button>
+          {isAuthenticated && user ? (
+            <Link to="/profile" className={styles['header__account']}>
+              <span className={styles['header__avatar']} aria-hidden="true">
+                {user.firstName.charAt(0)}
+              </span>
+              <span className={styles['header__name']}>{user.firstName}</span>
+            </Link>
+          ) : (
+            <Link to="/login" className={styles['header__signin']}>
+              Sign in
+            </Link>
+          )}
+        </div>
+      </div>
+      <MobileMenu />
+      <MiniCart isOpen={isMiniCartOpen} onClose={() => setMiniCartOpen(false)} />
+    </header>
+  );
+};
