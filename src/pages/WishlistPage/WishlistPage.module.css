@@ -1,0 +1,50 @@
+.page {
+  display: grid;
+  gap: 2rem;
+}
+
+.page__header {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.page__title {
+  margin: 0;
+  font-size: clamp(2.2rem, 3vw, 2.8rem);
+}
+
+.page__subtitle {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+.page__empty {
+  display: grid;
+  gap: 1rem;
+  padding: 3rem;
+  justify-items: center;
+  border-radius: 1.5rem;
+  background-color: var(--color-surface-secondary);
+}
+
+.page__link {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.page__grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 48rem) {
+  .page__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .page__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
