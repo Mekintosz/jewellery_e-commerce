@@ -1,0 +1,63 @@
+.input {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.input__label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.input__control {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: 0.875rem;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface-primary);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input__control--error {
+  border-color: var(--color-danger);
+  box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.15);
+}
+
+.input__field {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  border: none;
+  border-radius: inherit;
+  font-size: 0.95rem;
+  background: transparent;
+  color: var(--color-text-primary);
+}
+
+.input__field:focus {
+  outline: none;
+}
+
+.input__control:has(.input__field:focus) {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(27, 179, 167, 0.15);
+}
+
+.input__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.input__error {
+  font-size: 0.75rem;
+  color: var(--color-danger);
+}
+
+.input__helper {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}

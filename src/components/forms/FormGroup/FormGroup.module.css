@@ -1,0 +1,33 @@
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-group__label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.form-group__control {
+  display: flex;
+  align-items: center;
+  border-radius: 0.875rem;
+  border: 1px solid transparent;
+  padding: 0.25rem;
+}
+
+.form-group__control--error {
+  border-color: var(--color-danger);
+}
+
+.form-group__error {
+  font-size: 0.75rem;
+  color: var(--color-danger);
+}
+
+.form-group__helper {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
