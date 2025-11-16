@@ -5,7 +5,7 @@
   padding: 1.25rem;
   border-radius: 1.5rem;
   background-color: var(--color-surface-primary);
-  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.1);
+  box-shadow: var(--shadow-subtle);
 }
 
 @media (max-width: 47.9375rem) {

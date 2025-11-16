@@ -1,21 +1,22 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type UseLocalStorageOptions<T> = {
   serializer?: (value: T) => string;
   deserializer?: (value: string) => T;
 };
 
-const defaultSerializer = <T,>(value: T) => JSON.stringify(value);
-const defaultDeserializer = <T,>(value: string): T => JSON.parse(value) as T;
+const defaultSerializer = <T>(value: T) => JSON.stringify(value);
+const defaultDeserializer = <T>(value: string): T => JSON.parse(value) as T;
 
-export const useLocalStorage = <T,>(
+export const useLocalStorage = <T>(
   key: string,
   initialValue: T,
   options: UseLocalStorageOptions<T> = {}
 ) => {
-  const { serializer = defaultSerializer, deserializer = defaultDeserializer } = options;
+  const { serializer = defaultSerializer, deserializer = defaultDeserializer } =
+    options;
   const [storedValue, setStoredValue] = useState<T>(() => {
-    if (typeof window === 'undefined') {
+    if (typeof window === "undefined") {
       return initialValue;
     }
 
@@ -30,7 +31,7 @@ export const useLocalStorage = <T,>(
   const isFirstRenderRef = useRef(true);
 
   useEffect(() => {
-    if (typeof window === 'undefined') {
+    if (typeof window === "undefined") {
       return;
     }
 
@@ -45,10 +46,10 @@ export const useLocalStorage = <T,>(
     } catch {
       // no-op; localStorage write failures should not break UI
     }
-  }, [deserializer, key, serializer, storedValue]);
+  }, [key, serializer, storedValue]);
 
   const remove = useCallback(() => {
-    if (typeof window === 'undefined') {
+    if (typeof window === "undefined") {
       return;
     }
 
@@ -63,6 +64,6 @@ export const useLocalStorage = <T,>(
   return {
     value: storedValue,
     setValue: setStoredValue,
-    remove
+    remove,
   };
 };

@@ -7,6 +7,6 @@ type LogoProps = {
 
 export const Logo = ({ to = "/" }: LogoProps) => (
   <Link to={to} className={styles.logo} aria-label="Jewellery home">
-    <span className={styles["logo__text"]}>Jewells and gold</span>
+    <span className={styles["logo__text"]}>Jewells</span>
   </Link>
 );
