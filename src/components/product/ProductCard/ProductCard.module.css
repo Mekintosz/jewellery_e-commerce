@@ -1,0 +1,94 @@
+.card {
+  display: grid;
+  gap: 1rem;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+.card__media {
+  position: relative;
+}
+
+.card__image-wrapper {
+  display: block;
+  aspect-ratio: 1 / 1;
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.card:hover .card__image {
+  transform: scale(1.05);
+}
+
+.card__cta {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.92);
+  opacity: 0;
+  border: none;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--color-text-strong);
+  transition: opacity 0.3s ease;
+  cursor: pointer;
+}
+
+.card__cta:hover {
+  color: var(--color-primary);
+}
+
+.card:hover .card__cta {
+  opacity: 1;
+}
+
+.card__cta:disabled {
+  opacity: 1;
+  cursor: not-allowed;
+  color: var(--color-text-muted);
+}
+
+.card__wishlist {
+  position: absolute;
+  inset-block-start: 1rem;
+  inset-inline-end: 1rem;
+  border: none;
+  background: rgba(255, 255, 255, 0.7);
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  transition: color 0.3s ease;
+}
+
+.card__wishlist--active,
+.card__wishlist:hover {
+  color: var(--color-primary);
+}
+
+.card__content {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.card__name {
+  color: var(--color-text-strong);
+  text-decoration: none;
+}
+
+.card__name:hover {
+  color: var(--color-primary);
+}
