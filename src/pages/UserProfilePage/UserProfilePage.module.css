@@ -1,6 +1,8 @@
 .page {
   display: grid;
   gap: 2rem;
+  max-width: 50rem;
+  margin: 0 auto;
 }
 
 .page__header {
