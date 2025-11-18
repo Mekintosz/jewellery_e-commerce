@@ -4,7 +4,6 @@ import styles from './Navbar.module.css';
 const LINKS = [
   { label: 'Home', to: '/' },
   { label: 'Shop', to: '/products' },
-  { label: 'Collections', to: '/products?category=collections' },
   { label: 'About', to: '/contact' },
   { label: 'Profile', to: '/profile' }
 ];
