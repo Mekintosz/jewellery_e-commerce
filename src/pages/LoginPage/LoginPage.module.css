@@ -2,6 +2,7 @@
   display: grid;
   gap: 2rem;
   max-width: 28rem;
+  margin: 4rem auto;
 }
 
 .page__header {

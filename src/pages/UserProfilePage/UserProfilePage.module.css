@@ -1,5 +1,5 @@
 .page {
-  max-width: 80rem;
+  max-width: 60rem;
   margin: 0 auto;
   padding: 2rem 1rem;
 }
@@ -71,7 +71,11 @@
   width: 3rem;
   height: 3rem;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-primary-dark) 100%
+  );
   color: var(--color-text-on-primary);
   display: flex;
   align-items: center;
@@ -137,7 +141,7 @@
 }
 
 .sidebar__icon {
-  font-family: 'Material Symbols Outlined';
+  font-family: "Material Symbols Outlined";
   font-size: 1.25rem;
   font-weight: normal;
   font-style: normal;
@@ -394,7 +398,7 @@
 }
 
 .card__icon {
-  font-family: 'Material Symbols Outlined';
+  font-family: "Material Symbols Outlined";
   font-size: 1.125rem;
   font-weight: normal;
   font-style: normal;
@@ -421,7 +425,7 @@
 }
 
 .card__empty__icon {
-  font-family: 'Material Symbols Outlined';
+  font-family: "Material Symbols Outlined";
   font-size: 2.5rem;
   font-weight: normal;
   font-style: normal;
