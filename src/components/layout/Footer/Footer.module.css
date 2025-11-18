@@ -28,23 +28,6 @@
   color: var(--color-text-muted);
 }
 
-.footer__newsletter {
-  display: grid;
-  gap: 1rem;
-}
-
-.footer__newsletter-text {
-  margin: 0;
-  font-weight: 600;
-  color: var(--color-text-primary);
-}
-
-.footer__form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
 .footer__links {
   display: grid;
   gap: 1.5rem;

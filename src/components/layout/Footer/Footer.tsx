@@ -1,7 +1,5 @@
 import styles from './Footer.module.css';
 import { Logo } from '../../common/Logo/Logo';
-import { Input } from '../../forms/Input/Input';
-import { Button } from '../../ui/Button/Button';
 
 const footerLinks = {
   Shop: ['New Arrivals', 'Best Sellers', 'Necklaces', 'Rings'],
@@ -18,15 +16,6 @@ export const Footer = () => (
           Handcrafted fine jewellery with responsibly sourced materials. Discover timeless pieces designed to celebrate
           life&apos;s luminous moments.
         </p>
-        <div className={styles['footer__newsletter']}>
-          <p className={styles['footer__newsletter-text']}>Join our circle for exclusive previews and offers.</p>
-          <form className={styles['footer__form']} aria-label="Newsletter signup">
-            <Input type="email" placeholder="Email address" aria-label="Email address" required />
-            <Button type="submit" size="sm">
-              Subscribe
-            </Button>
-          </form>
-        </div>
       </div>
       <div className={styles['footer__links']}>
         {Object.entries(footerLinks).map(([section, links]) => (
