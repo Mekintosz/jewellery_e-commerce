@@ -14,7 +14,6 @@ export const ProductFilter = () => {
   }, [filters]);
 
   const categories = useMemo(() => Array.from(new Set(products.map((product) => product.category))).sort(), [products]);
-  const brands = useMemo(() => Array.from(new Set(products.map((product) => product.brand))).sort(), [products]);
 
   const priceOptions: Array<{ label: string; range: [number, number] }> = [
     { label: 'All', range: [0, 10000] },
@@ -75,27 +74,6 @@ export const ProductFilter = () => {
                   aria-pressed={isActive}
                 >
                   {category}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </section>
-
-      <section className={styles['filter__section']}>
-        <h3 className={styles['filter__heading']}>Brands</h3>
-        <ul className={styles['filter__list']}>
-          {brands.map((brand) => {
-            const isActive = localFilters.brands.includes(brand);
-            return (
-              <li key={brand}>
-                <button
-                  type="button"
-                  className={`${styles['filter__option']} ${isActive ? styles['filter__option--active'] : ''}`}
-                  onClick={() => toggleFilterValue('brands', brand)}
-                  aria-pressed={isActive}
-                >
-                  {brand}
                 </button>
               </li>
             );
