@@ -4,7 +4,6 @@
   gap: 3rem;
   max-width: 60rem;
   margin: 0 auto;
-  padding: 1rem;
 }
 
 /* Header Section */
@@ -12,22 +11,14 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  margin-top: 2rem;
   min-width: 18rem;
 }
 
 .page__title {
   margin: 0;
-  font-size: 3rem;
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.033em;
-}
-
-@media (min-width: 48rem) {
-  .page__title {
-    font-size: 3.75rem;
-  }
+  font-size: clamp(2.5rem, 4vw, 3rem);
+  letter-spacing: 0.04em;
+  text-transform: none;
 }
 
 .page__subtitle {
@@ -64,7 +55,7 @@
 }
 
 .info-card__icon {
-  color: var(--color-primary, #2A0052);
+  color: var(--color-primary, #2a0052);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -98,7 +89,7 @@
 }
 
 .info-card__link:hover {
-  color: var(--color-primary, #2A0052);
+  color: var(--color-primary, #2a0052);
 }
 
 /* Content Grid (Form + Location) */
@@ -158,7 +149,7 @@
 .form-input:focus,
 .form-textarea:focus {
   outline: none;
-  border-color: var(--color-primary, #2A0052);
+  border-color: var(--color-primary, #2a0052);
 }
 
 .form-textarea {

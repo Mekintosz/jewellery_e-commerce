@@ -1,7 +1,6 @@
 .page {
   display: grid;
   gap: 3rem;
-  padding-block: 3rem 4rem;
 }
 
 .page__header {

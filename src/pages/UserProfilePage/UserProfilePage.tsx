@@ -23,12 +23,6 @@ const UserProfilePage = () => {
 
   return (
     <div className={styles.page}>
-      <div className={styles.breadcrumbs}>
-        <a href="/" className={styles.breadcrumbs__link}>Home</a>
-        <span className={styles.breadcrumbs__separator}>/</span>
-        <span className={styles.breadcrumbs__current}>My Account</span>
-      </div>
-
       <h1 className={styles.page__title}>My Account</h1>
 
       <div className={styles.container}>
