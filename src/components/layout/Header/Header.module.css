@@ -74,7 +74,7 @@
 .header__actions {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.9rem;
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.28em;
@@ -85,7 +85,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 4.5rem;
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: 0.75rem;
   color: var(--color-text);
   cursor: pointer;
   transition: color 0.3s ease;
@@ -97,8 +100,8 @@
 
 .header__badge {
   position: absolute;
-  inset-block-start: -0.6rem;
-  inset-inline-end: -0.6rem;
+  inset-block-start: -1rem;
+  inset-inline-end: -1.5rem;
 }
 
 .header__account {
