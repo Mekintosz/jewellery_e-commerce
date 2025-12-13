@@ -59,3 +59,32 @@
 .filter__option--active {
   color: var(--color-primary);
 }
+
+.filter__price {
+  display: grid;
+  gap: 1rem;
+}
+
+.filter__price-values {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+}
+
+.filter__range {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.filter__range-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.24em;
+  color: var(--color-text-muted);
+}
+
+.filter__range-input {
+  width: 100%;
+  accent-color: var(--color-primary);
+}

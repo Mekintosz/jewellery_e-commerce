@@ -1,54 +1,83 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import styles from './ProductFilter.module.css';
 import { useProducts } from '../../../context/ProductContext';
 import { Button } from '../../ui/Button/Button';
-import { useUI } from '../../../context/UIContext';
+
+const formatPrice = (value: number) => {
+  if (!Number.isFinite(value)) {
+    return '∞';
+  }
+  return `$${Math.round(value).toLocaleString()}`;
+};
 
 export const ProductFilter = () => {
   const { products, filters, setFilters } = useProducts();
-  const { closeModal } = useUI();
-  const [localFilters, setLocalFilters] = useState(filters);
-
-  useEffect(() => {
-    setLocalFilters(filters);
-  }, [filters]);
 
   const categories = useMemo(() => Array.from(new Set(products.map((product) => product.category))).sort(), [products]);
 
-  const priceOptions: Array<{ label: string; range: [number, number] }> = [
-    { label: 'All', range: [0, 10000] },
-    { label: '$0 - $250', range: [0, 250] },
-    { label: '$250 - $500', range: [250, 500] },
-    { label: '$500+', range: [500, 10000] }
-  ];
+  const maxPrice = useMemo(() => {
+    const prices = products.map((product) => product.salePrice ?? product.price);
+    return prices.length > 0 ? Math.max(...prices) : 10000;
+  }, [products]);
 
-  const toggleFilterValue = (key: 'categories' | 'brands' | 'tags', value: string) => {
-    setLocalFilters((prev) => {
-      const current = prev[key];
-      const exists = current.includes(value);
+  const maxSliderValue = useMemo(() => {
+    const explicitMax = Number.isFinite(filters.priceRange[1]) ? filters.priceRange[1] : 0;
+    return Math.max(maxPrice, filters.priceRange[0], explicitMax);
+  }, [filters.priceRange, maxPrice]);
+
+  const displayedMaxPrice = Number.isFinite(filters.priceRange[1])
+    ? filters.priceRange[1]
+    : Math.max(maxPrice, filters.priceRange[0]);
+
+  const toggleCategory = (category: string) => {
+    setFilters((prev) => {
+      const exists = prev.categories.includes(category);
       return {
         ...prev,
-        [key]: exists ? current.filter((item) => item !== value) : [...current, value]
+        categories: exists ? prev.categories.filter((item) => item !== category) : [...prev.categories, category]
       };
     });
   };
 
-  const applyFilters = () => {
-    setFilters(localFilters);
-    closeModal();
+  const toggleInStockOnly = () => {
+    setFilters((prev) => ({
+      ...prev,
+      inStockOnly: !prev.inStockOnly
+    }));
+  };
+
+  const handleMinPriceChange = (nextMinRaw: number) => {
+    setFilters((prev) => {
+      const currentMax = Number.isFinite(prev.priceRange[1]) ? prev.priceRange[1] : Number.POSITIVE_INFINITY;
+      const nextMin = Math.min(nextMinRaw, currentMax);
+      return {
+        ...prev,
+        priceRange: [nextMin, prev.priceRange[1]]
+      };
+    });
+  };
+
+  const handleMaxPriceChange = (nextMaxRaw: number) => {
+    setFilters((prev) => {
+      const nextMaxFinite = Math.max(nextMaxRaw, prev.priceRange[0]);
+      const nextMax = nextMaxFinite === maxPrice ? Number.POSITIVE_INFINITY : nextMaxFinite;
+      return {
+        ...prev,
+        priceRange: [prev.priceRange[0], nextMax]
+      };
+    });
   };
 
   const clearFilters = () => {
-    const clearedFilters = {
-      ...localFilters,
+    setFilters({
       categories: [],
       brands: [],
-      priceRange: [0, 10000] as [number, number],
+      priceRange: [0, Number.POSITIVE_INFINITY],
+      rating: null,
       inStockOnly: false,
+      query: '',
       tags: []
-    };
-    setLocalFilters(clearedFilters);
-    setFilters(clearedFilters);
+    });
   };
 
   return (
@@ -64,13 +93,13 @@ export const ProductFilter = () => {
         <h3 className={styles['filter__heading']}>Categories</h3>
         <ul className={styles['filter__list']}>
           {categories.map((category) => {
-            const isActive = localFilters.categories.includes(category);
+            const isActive = filters.categories.includes(category);
             return (
               <li key={category}>
                 <button
                   type="button"
                   className={`${styles['filter__option']} ${isActive ? styles['filter__option--active'] : ''}`}
-                  onClick={() => toggleFilterValue('categories', category)}
+                  onClick={() => toggleCategory(category)}
                   aria-pressed={isActive}
                 >
                   {category}
@@ -85,9 +114,9 @@ export const ProductFilter = () => {
         <h3 className={styles['filter__heading']}>Availability</h3>
         <button
           type="button"
-          className={`${styles['filter__option']} ${localFilters.inStockOnly ? styles['filter__option--active'] : ''}`}
-          onClick={() => setLocalFilters((prev) => ({ ...prev, inStockOnly: !prev.inStockOnly }))}
-          aria-pressed={localFilters.inStockOnly}
+          className={`${styles['filter__option']} ${filters.inStockOnly ? styles['filter__option--active'] : ''}`}
+          onClick={toggleInStockOnly}
+          aria-pressed={filters.inStockOnly}
         >
           In stock only
         </button>
@@ -95,34 +124,39 @@ export const ProductFilter = () => {
 
       <section className={styles['filter__section']}>
         <h3 className={styles['filter__heading']}>Price</h3>
-        <ul className={styles['filter__list']}>
-          {priceOptions.map((option) => {
-            const isActive =
-              option.range[0] === localFilters.priceRange[0] && option.range[1] === localFilters.priceRange[1];
-            return (
-              <li key={option.label}>
-                <button
-                  type="button"
-                  className={`${styles['filter__option']} ${isActive ? styles['filter__option--active'] : ''}`}
-                  onClick={() =>
-                    setLocalFilters((prev) => ({
-                      ...prev,
-                      priceRange: option.range
-                    }))
-                  }
-                  aria-pressed={isActive}
-                >
-                  {option.label}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </section>
+        <div className={styles['filter__price']}>
+          <div className={styles['filter__price-values']}>
+            <span>Min: {formatPrice(filters.priceRange[0])}</span>
+            <span>Max: {formatPrice(displayedMaxPrice)}</span>
+          </div>
 
-      <Button variant="primary" isFullWidth onClick={applyFilters}>
-        Apply filters
-      </Button>
+          <label className={styles['filter__range']}>
+            <span className={styles['filter__range-label']}>Min</span>
+            <input
+              className={styles['filter__range-input']}
+              type="range"
+              min={0}
+              max={maxSliderValue}
+              step={50}
+              value={filters.priceRange[0]}
+              onChange={(event) => handleMinPriceChange(Number(event.target.value))}
+            />
+          </label>
+
+          <label className={styles['filter__range']}>
+            <span className={styles['filter__range-label']}>Max</span>
+            <input
+              className={styles['filter__range-input']}
+              type="range"
+              min={0}
+              max={maxSliderValue}
+              step={50}
+              value={displayedMaxPrice}
+              onChange={(event) => handleMaxPriceChange(Number(event.target.value))}
+            />
+          </label>
+        </div>
+      </section>
     </aside>
   );
 };
