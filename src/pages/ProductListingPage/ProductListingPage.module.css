@@ -32,6 +32,17 @@
   color: var(--color-text-muted);
 }
 
+.page__active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.page__active-filter {
+  letter-spacing: 0.08em;
+}
+
 .page__actions {
   display: inline-flex;
   gap: 1.5rem;
@@ -40,6 +51,11 @@
 
 .page__filter-button {
   display: inline-flex;
+  align-items: center;
+}
+
+.page__filter-badge {
+  margin-left: 0.5rem;
 }
 
 .page__content {
