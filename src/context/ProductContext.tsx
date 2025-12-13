@@ -1,6 +1,7 @@
 import {
   createContext,
   ReactNode,
+  SetStateAction,
   useCallback,
   useContext,
   useEffect,
@@ -19,7 +20,7 @@ type ProductContextValue = {
   error: string | null;
   filters: ProductFilters;
   sortBy: SortOption;
-  setFilters: (filters: ProductFilters) => void;
+  setFilters: (filters: SetStateAction<ProductFilters>) => void;
   setSort: (sort: SortOption) => void;
   refresh: () => Promise<void>;
 };
@@ -27,7 +28,7 @@ type ProductContextValue = {
 const defaultFilters: ProductFilters = {
   categories: [],
   brands: [],
-  priceRange: [0, 10000],
+  priceRange: [0, Number.POSITIVE_INFINITY],
   rating: null,
   inStockOnly: false,
   query: '',
@@ -77,7 +78,6 @@ const filterProducts = (products: Product[], filters: ProductFilters) => {
 
 export const ProductProvider = ({ children }: { children: ReactNode }) => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [filtered, setFiltered] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filters, setFiltersState] = useState<ProductFilters>(defaultFilters);
@@ -97,28 +97,22 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
     try {
       const data = await productService.getProducts();
       setProducts(data);
-      setFiltered(applyFilters(data, filters, sortBy));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to load products');
     } finally {
       setIsLoading(false);
     }
-  }, [applyFilters, filters, sortBy]);
+  }, []);
 
   useEffect(() => {
     void loadProducts();
   }, [loadProducts]);
 
-  useEffect(() => {
-    setFiltered(applyFilters(products, filters, sortBy));
-  }, [applyFilters, filters, products, sortBy]);
+  const filteredProducts = useMemo(() => applyFilters(products, filters, sortBy), [applyFilters, products, filters, sortBy]);
 
-  const handleSetFilters = useCallback(
-    (nextFilters: ProductFilters) => {
-      setFiltersState(nextFilters);
-    },
-    []
-  );
+  const handleSetFilters = useCallback((nextFilters: SetStateAction<ProductFilters>) => {
+    setFiltersState((prev) => (typeof nextFilters === 'function' ? nextFilters(prev) : nextFilters));
+  }, []);
 
   const handleSetSort = useCallback((sort: SortOption) => {
     setSortBy(sort);
@@ -127,7 +121,7 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
   const contextValue = useMemo<ProductContextValue>(
     () => ({
       products,
-      filteredProducts: filtered,
+      filteredProducts,
       isLoading,
       error,
       filters,
@@ -136,7 +130,7 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
       setSort: handleSetSort,
       refresh: loadProducts
     }),
-    [error, filtered, filters, handleSetFilters, handleSetSort, isLoading, loadProducts, products, sortBy]
+    [error, filteredProducts, filters, handleSetFilters, handleSetSort, isLoading, loadProducts, products, sortBy]
   );
 
   return <ProductContext.Provider value={contextValue}>{children}</ProductContext.Provider>;
