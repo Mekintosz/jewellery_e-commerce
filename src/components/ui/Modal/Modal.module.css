@@ -17,7 +17,7 @@
   position: relative;
   width: min(90vw, 40rem);
   max-height: 90vh;
-  background-color: var(--color-surface-primary);
+  background-color: var(--color-surface-secondary);
   border-radius: 1.5rem;
   padding: 1.5rem;
   box-shadow: 0 20px 40px rgba(17, 27, 39, 0.2);

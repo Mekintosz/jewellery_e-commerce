@@ -14,7 +14,7 @@
 @media (min-width: 56rem) {
   .page__header {
     flex-direction: row;
-    align-items: center;
+    align-items: end;
     justify-content: space-between;
   }
 }
@@ -50,8 +50,14 @@
 }
 
 .page__filter-button {
-  display: inline-flex;
+  display: flex;
   align-items: center;
+}
+
+@media (min-width: 56rem) {
+  .page__filter-button {
+    display: none;
+  }
 }
 
 .page__filter-badge {
@@ -81,7 +87,6 @@
 
 .page__results {
   display: grid;
-  gap: 2rem;
 }
 
 .page__summary {

@@ -85,6 +85,7 @@
 }
 
 .card__name {
+  font-size: 1.6rem;
   color: var(--color-text-strong);
   text-decoration: none;
 }
