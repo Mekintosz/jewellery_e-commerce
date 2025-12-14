@@ -80,7 +80,7 @@ export const Header = () => {
         <div className={styles["header__actions"]}>
           <Link
             to="/wishlist"
-            className={styles["header__icon"]}
+            className={`${styles["header__icon"]} ${styles["header__wishlist"]}`}
             aria-label="View wishlist"
           >
             Wishlist
