@@ -9,7 +9,6 @@ import {
 import { useSearchParams } from "react-router-dom";
 import styles from "./ProductListingPage.module.css";
 import { ProductFilter } from "../../components/product/ProductFilter/ProductFilter";
-import { ProductSort } from "../../components/product/ProductSort/ProductSort";
 import { ProductGrid } from "../../components/product/ProductGrid/ProductGrid";
 import { useProducts } from "../../context/ProductContext";
 import { Loader } from "../../components/ui/Loader/Loader";
@@ -271,7 +270,6 @@ const ProductListingPage = () => {
           ) : null}
         </div>
         <div className={styles["page__actions"]}>
-          <ProductSort />
           <Button
             variant="secondary"
             size="sm"
