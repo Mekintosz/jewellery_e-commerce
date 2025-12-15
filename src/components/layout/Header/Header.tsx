@@ -66,8 +66,13 @@ export const Header = () => {
           <Navbar />
         </div>
         <div className={styles["header__search"]}>
-          <span className={styles["header__search-icon"]} aria-hidden="true">
-            🔍
+          <span
+            className={`${
+              styles["header__search-icon"]
+            } ${"material-symbols-outlined"}`}
+            aria-hidden="true"
+          >
+            search
           </span>
           <input
             className={styles["header__search-field"]}
@@ -93,7 +98,11 @@ export const Header = () => {
           >
             <span className="material-symbols-outlined">shopping_bag</span>
             {cartCount > 0 ? (
-              <Badge className={styles["header__badge"]} variant="default">
+              <Badge
+                className={styles["header__badge"]}
+                variant="default"
+                size="cart"
+              >
                 {cartCount}
               </Badge>
             ) : null}

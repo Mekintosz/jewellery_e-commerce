@@ -28,11 +28,12 @@
 }
 
 .navbar__link::after {
-  content: '';
+  content: "";
   position: absolute;
   inset-inline: 0;
   bottom: -0.5rem;
-  height: 2px;
+  left: -0.38rem;
+  height: 1px;
   background-color: transparent;
   transition: background-color 0.2s ease;
 }

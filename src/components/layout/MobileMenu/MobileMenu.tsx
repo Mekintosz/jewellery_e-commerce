@@ -25,7 +25,7 @@ export const MobileMenu = () => {
         <p className={styles["mobile-menu__title"]}>Menu</p>
         <Button
           variant="ghost"
-          size="lg"
+          size="menu"
           onClick={closeModal}
           aria-label="Close mobile menu"
         >
