@@ -17,6 +17,11 @@
   font-size: 0.75rem;
 }
 
+.badge--cart {
+  padding: 0.25rem 0.55rem;
+  font-size: 0.8rem;
+}
+
 .badge--default {
   background-color: var(--color-surface-tertiary);
   color: var(--color-text-secondary);

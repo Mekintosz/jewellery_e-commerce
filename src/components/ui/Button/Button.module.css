@@ -30,6 +30,11 @@
 }
 
 .button--lg {
+  padding: 0.6rem 1.5rem;
+  font-size: 0.9rem;
+}
+
+.button--menu {
   font-size: 1.6rem;
 }
 

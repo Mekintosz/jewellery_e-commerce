@@ -1,9 +1,9 @@
-import { Link } from 'react-router-dom';
-import styles from './ProductCard.module.css';
-import { Product } from '../../../types/product';
-import { PriceDisplay } from '../PriceDisplay/PriceDisplay';
-import { useCart } from '../../../context/CartContext';
-import { useWishlist } from '../../../context/WishlistContext';
+import { Link } from "react-router-dom";
+import styles from "./ProductCard.module.css";
+import { Product } from "../../../types/product";
+import { PriceDisplay } from "../PriceDisplay/PriceDisplay";
+import { useCart } from "../../../context/CartContext";
+import { useWishlist } from "../../../context/WishlistContext";
 
 type ProductCardProps = {
   product: Product;
@@ -16,7 +16,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
   const defaultVariant = {
     size: product.variants.size[0],
-    color: product.variants.color[0]
+    color: product.variants.color[0],
   };
 
   const handleAddToCart = () => {
@@ -25,29 +25,39 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
   return (
     <article className={styles.card}>
-      <div className={styles['card__media']}>
-        <Link to={`/products/${product.id}`} className={styles['card__image-wrapper']}>
-          <img src={product.images[0]} alt={product.name} className={styles['card__image']} loading="lazy" />
+      <div className={styles["card__media"]}>
+        <Link
+          to={`/products/${product.id}`}
+          className={styles["card__image-wrapper"]}
+        >
+          <img
+            src={product.images[0]}
+            alt={product.name}
+            className={styles["card__image"]}
+            loading="lazy"
+          />
         </Link>
         <button
           type="button"
-          className={styles['card__cta']}
+          className={styles["card__cta"]}
           onClick={handleAddToCart}
           disabled={!product.inStock}
         >
-          {product.inStock ? 'Add to Cart' : 'Sold Out'}
+          {product.inStock ? "Add to Cart" : "Sold Out"}
         </button>
         <button
           type="button"
-          className={`${styles['card__wishlist']} ${inWishlist ? styles['card__wishlist--active'] : ''}`}
+          className={`${styles["card__wishlist"]} ${
+            inWishlist ? styles["card__wishlist--active"] : ""
+          }`}
           onClick={() => toggleItem(product.id)}
-          aria-label={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
+          aria-label={inWishlist ? "Remove from wishlist" : "Add to wishlist"}
         >
-          ♡
+          <span className="material-symbols-outlined">favorite</span>
         </button>
       </div>
-      <div className={styles['card__content']}>
-        <Link to={`/products/${product.id}`} className={styles['card__name']}>
+      <div className={styles["card__content"]}>
+        <Link to={`/products/${product.id}`} className={styles["card__name"]}>
           {product.name}
         </Link>
         <PriceDisplay price={product.price} salePrice={product.salePrice} />

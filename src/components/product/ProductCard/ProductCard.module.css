@@ -24,7 +24,7 @@
 }
 
 .card:hover .card__image {
-  transform: scale(1.05);
+  transform: scale(1.03);
 }
 
 .card__cta {
@@ -62,20 +62,26 @@
   inset-block-start: 1rem;
   inset-inline-end: 1rem;
   border: none;
-  background: rgba(255, 255, 255, 0.7);
-  width: 2rem;
-  height: 2rem;
+  background: rgba(255, 255, 255, 0.308);
+  width: 1.6rem;
+  height: 1.6rem;
   border-radius: 999px;
   display: grid;
   place-items: center;
   cursor: pointer;
-  font-size: 1rem;
   color: var(--color-text-muted);
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
+
+  & span {
+    font-size: 1.2rem;
+    margin-left: -0.19rem;
+    margin-top: 0.1rem;
+  }
 }
 
 .card__wishlist--active,
 .card__wishlist:hover {
+  background-color: var(--color-surface-tertiary);
   color: var(--color-primary);
 }
 
@@ -85,7 +91,7 @@
 }
 
 .card__name {
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   color: var(--color-text-strong);
   text-decoration: none;
 }
