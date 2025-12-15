@@ -1,16 +1,16 @@
 :root {
   --font-display: "Marcellus", serif;
-  --color-primary: #2a0052;
-  --color-primary-dark: #21003f;
+  --color-primary: #2f005a;
+  --color-primary-dark: #2b0053;
   --color-primary-soft: rgba(42, 0, 82, 0.08);
-  --color-text-strong: #1f2937;
+  --color-text-strong: #231b2e;
   --color-text: #374151;
   --color-text-muted: #6b7280;
   --color-surface: #ffffff;
   --color-surface-alt: #f6f4f7;
   --color-surface-secondary: #f6f4f7;
   --color-surface-tertiary: #ebe6f2;
-  --color-border: rgba(31, 41, 55, 0.08);
+  --color-border: rgba(31, 41, 55, 0.267);
   --color-border-strong: rgba(31, 41, 55, 0.18);
   --color-text-on-primary: #ffffff;
   --color-success: #1f6f5b;
