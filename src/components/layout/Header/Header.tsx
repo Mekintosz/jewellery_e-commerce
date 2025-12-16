@@ -1,4 +1,11 @@
-import { ChangeEvent, useMemo, useState } from "react";
+import {
+  ChangeEvent,
+  FormEvent,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import styles from "./Header.module.css";
 import { Logo } from "../../common/Logo/Logo";
@@ -10,6 +17,7 @@ import { MobileMenu } from "../MobileMenu/MobileMenu";
 import { useUI } from "../../../context/UIContext";
 import { MiniCart } from "../../cart/MiniCart/MiniCart";
 import { useProducts } from "../../../context/ProductContext";
+import { debounce } from "../../../utils/debounce";
 
 export const Header = () => {
   const { items } = useCart();
@@ -18,33 +26,87 @@ export const Header = () => {
   const { filters, setFilters } = useProducts();
   const navigate = useNavigate();
   const location = useLocation();
+  const isOnProductsPage = location.pathname === "/products";
+
+  const [searchValue, setSearchValue] = useState(filters.query);
   const [isMiniCartOpen, setMiniCartOpen] = useState(false);
   const cartCount = useMemo(
     () => items.reduce((total, item) => total + item.quantity, 0),
-    [items]
+    [items],
   );
 
+  const isEditingSearchRef = useRef(false);
+
+  useEffect(() => {
+    if (!isEditingSearchRef.current) {
+      setSearchValue(filters.query);
+    }
+  }, [filters.query]);
+
+  const debouncedSetQuery = useMemo(
+    () =>
+      debounce((query: string) => {
+        setFilters((prev) => {
+          if (prev.query === query) {
+            return prev;
+          }
+          return { ...prev, query };
+        });
+      }, 250),
+    [setFilters],
+  );
+
+  useEffect(() => {
+    return () => {
+      debouncedSetQuery.cancel();
+    };
+  }, [debouncedSetQuery]);
+
+  useEffect(() => {
+    if (!isOnProductsPage) {
+      debouncedSetQuery.cancel();
+    }
+  }, [debouncedSetQuery, isOnProductsPage]);
+
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    isEditingSearchRef.current = true;
+
     const query = event.target.value;
+    setSearchValue(query);
 
-    setFilters((prev) => ({
-      ...prev,
-      query,
-    }));
+    if (isOnProductsPage) {
+      debouncedSetQuery(query);
+    }
+  };
 
-    const nextParams = new URLSearchParams(
-      location.pathname === "/products" ? location.search : ""
-    );
-    if (query.trim().length > 0) {
-      nextParams.set("query", query);
-    } else {
-      nextParams.delete("query");
+  const handleSearchSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    isEditingSearchRef.current = false;
+
+    const normalized = searchValue.trim();
+    setSearchValue(normalized);
+
+    debouncedSetQuery.cancel();
+
+    if (isOnProductsPage) {
+      setFilters((prev) => {
+        if (prev.query === normalized) {
+          return prev;
+        }
+        return { ...prev, query: normalized };
+      });
+      return;
+    }
+
+    const nextParams = new URLSearchParams();
+    if (normalized.length > 0) {
+      nextParams.set("query", normalized);
     }
 
     const nextSearch = nextParams.toString();
     const nextUrl =
       nextSearch.length > 0 ? `/products?${nextSearch}` : "/products";
-    navigate(nextUrl, { replace: location.pathname === "/products" });
+    navigate(nextUrl);
   };
 
   const handleCartToggle = () => {
@@ -65,7 +127,11 @@ export const Header = () => {
           <Logo />
           <Navbar />
         </div>
-        <div className={styles["header__search"]}>
+        <form
+          className={styles["header__search"]}
+          role="search"
+          onSubmit={handleSearchSubmit}
+        >
           <span
             className={`${
               styles["header__search-icon"]
@@ -76,12 +142,19 @@ export const Header = () => {
           </span>
           <input
             className={styles["header__search-field"]}
+            type="search"
             placeholder="Search jewellery"
             aria-label="Search jewellery"
+            onFocus={() => {
+              isEditingSearchRef.current = true;
+            }}
+            onBlur={() => {
+              isEditingSearchRef.current = false;
+            }}
             onChange={handleSearchChange}
-            value={filters.query}
+            value={searchValue}
           />
-        </div>
+        </form>
         <div className={styles["header__actions"]}>
           <Link
             to="/wishlist"

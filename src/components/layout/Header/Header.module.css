@@ -165,7 +165,9 @@
   letter-spacing: 0.28em;
   text-transform: uppercase;
   color: var(--color-text);
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .header__signin:hover {
