@@ -5,23 +5,23 @@ import { ProtectedRoute } from "./ProtectedRoute";
 
 const HomePage = lazy(() => import("../pages/HomePage/HomePage"));
 const ProductListingPage = lazy(
-  () => import("../pages/ProductListingPage/ProductListingPage")
+  () => import("../pages/ProductListingPage/ProductListingPage"),
 );
 const ProductDetailPage = lazy(
-  () => import("../pages/ProductDetailPage/ProductDetailPage")
+  () => import("../pages/ProductDetailPage/ProductDetailPage"),
 );
 const ShoppingCartPage = lazy(
-  () => import("../pages/ShoppingCartPage/ShoppingCartPage")
+  () => import("../pages/ShoppingCartPage/ShoppingCartPage"),
 );
 const CheckoutPage = lazy(() => import("../pages/CheckoutPage/CheckoutPage"));
 const ContactUsPage = lazy(
-  () => import("../pages/ContactUsPage/ContactUsPage")
+  () => import("../pages/ContactUsPage/ContactUsPage"),
 );
 const RegistrationPage = lazy(
-  () => import("../pages/RegistrationPage/RegistrationPage")
+  () => import("../pages/RegistrationPage/RegistrationPage"),
 );
 const UserProfilePage = lazy(
-  () => import("../pages/UserProfilePage/UserProfilePage")
+  () => import("../pages/UserProfilePage/UserProfilePage"),
 );
 const WishlistPage = lazy(() => import("../pages/WishlistPage/WishlistPage"));
 const LoginPage = lazy(() => import("../pages/LoginPage/LoginPage"));
@@ -54,14 +54,7 @@ export const AppRoutes = () => {
             </ProtectedRoute>
           ),
         },
-        {
-          path: "wishlist",
-          element: (
-            <ProtectedRoute>
-              <WishlistPage />
-            </ProtectedRoute>
-          ),
-        },
+        { path: "wishlist", element: <WishlistPage /> },
         { path: "login", element: <LoginPage /> },
         { path: "*", element: <Navigate to="/" replace /> },
       ],
