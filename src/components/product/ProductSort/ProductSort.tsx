@@ -1,19 +1,19 @@
-import styles from './ProductSort.module.css';
-import { useProducts } from '../../../context/ProductContext';
+import styles from "./ProductSort.module.css";
+import { type SortOption, useProducts } from "../../../context/ProductContext";
 
 export const ProductSort = () => {
   const { sortBy, setSort } = useProducts();
 
   return (
     <div className={styles.sort}>
-      <label className={styles['sort__label']} htmlFor="sort">
+      <label className={styles["sort__label"]} htmlFor="sort">
         Sort by
       </label>
       <select
         id="sort"
-        className={styles['sort__select']}
+        className={styles["sort__select"]}
         value={sortBy}
-        onChange={(event) => setSort(event.target.value as typeof sortBy)}
+        onChange={(event) => setSort(event.target.value as SortOption)}
       >
         <option value="featured">Featured</option>
         <option value="price-asc">Price: Low to High</option>

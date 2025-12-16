@@ -6,7 +6,11 @@
 .gallery__main {
   border-radius: 1.5rem;
   overflow: hidden;
-  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 100%);
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.6) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
 }
 
 .gallery__main img {

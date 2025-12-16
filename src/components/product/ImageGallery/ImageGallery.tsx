@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import styles from './ImageGallery.module.css';
+import { useState } from "react";
+import styles from "./ImageGallery.module.css";
 
 type ImageGalleryProps = {
   images: string[];
@@ -12,19 +12,23 @@ export const ImageGallery = ({ images, alt }: ImageGalleryProps) => {
 
   return (
     <div className={styles.gallery}>
-      <div className={styles['gallery__main']}>
+      <div className={styles["gallery__main"]}>
         <img src={activeImage} alt={alt} loading="lazy" />
       </div>
-      <div className={styles['gallery__thumbnails']}>
+      <div className={styles["gallery__thumbnails"]}>
         {images.map((image, index) => (
           <button
             type="button"
             key={image}
-            className={`${styles['gallery__thumbnail']} ${index === activeIndex ? styles['gallery__thumbnail--active'] : ''}`}
+            className={`${styles["gallery__thumbnail"]} ${index === activeIndex ? styles["gallery__thumbnail--active"] : ""}`}
             onClick={() => setActiveIndex(index)}
             aria-label={`View image ${index + 1}`}
           >
-            <img src={image} alt={`${alt} thumbnail ${index + 1}`} loading="lazy" />
+            <img
+              src={image}
+              alt={`${alt} thumbnail ${index + 1}`}
+              loading="lazy"
+            />
           </button>
         ))}
       </div>
