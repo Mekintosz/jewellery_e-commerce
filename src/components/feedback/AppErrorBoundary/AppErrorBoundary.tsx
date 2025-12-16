@@ -1,5 +1,5 @@
-import { Component, ErrorInfo, ReactNode } from 'react';
-import styles from './AppErrorBoundary.module.css';
+import { Component, ErrorInfo, ReactNode } from "react";
+import styles from "./AppErrorBoundary.module.css";
 
 type AppErrorBoundaryProps = {
   children: ReactNode;
@@ -10,7 +10,10 @@ type AppErrorBoundaryState = {
   error?: Error;
 };
 
-export class AppErrorBoundary extends Component<AppErrorBoundaryProps, AppErrorBoundaryState> {
+export class AppErrorBoundary extends Component<
+  AppErrorBoundaryProps,
+  AppErrorBoundaryState
+> {
   constructor(props: AppErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
@@ -22,8 +25,7 @@ export class AppErrorBoundary extends Component<AppErrorBoundaryProps, AppErrorB
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     if (import.meta.env.DEV) {
-      // eslint-disable-next-line no-console
-      console.error('Uncaught error:', error, errorInfo);
+      console.error("Uncaught error:", error, errorInfo);
     }
   }
 
@@ -35,12 +37,19 @@ export class AppErrorBoundary extends Component<AppErrorBoundaryProps, AppErrorB
   render() {
     if (this.state.hasError) {
       return (
-        <div className={styles['error-boundary']}>
-          <h1 className={styles['error-boundary__title']}>Something went wrong</h1>
-          <p className={styles['error-boundary__message']}>
-            {this.state.error?.message ?? 'An unexpected error occurred. Please try refreshing the page.'}
+        <div className={styles["error-boundary"]}>
+          <h1 className={styles["error-boundary__title"]}>
+            Something went wrong
+          </h1>
+          <p className={styles["error-boundary__message"]}>
+            {this.state.error?.message ??
+              "An unexpected error occurred. Please try refreshing the page."}
           </p>
-          <button type="button" className={styles['error-boundary__button']} onClick={this.handleRetry}>
+          <button
+            type="button"
+            className={styles["error-boundary__button"]}
+            onClick={this.handleRetry}
+          >
             Reload
           </button>
         </div>
