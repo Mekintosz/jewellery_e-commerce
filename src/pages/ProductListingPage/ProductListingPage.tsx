@@ -10,7 +10,7 @@ import { useSearchParams } from "react-router-dom";
 import styles from "./ProductListingPage.module.css";
 import { ProductFilter } from "../../components/product/ProductFilter/ProductFilter";
 import { ProductGrid } from "../../components/product/ProductGrid/ProductGrid";
-import { useProducts } from "../../context/ProductContext";
+import { defaultFilters, useProducts } from "../../context/ProductContext";
 import { Loader } from "../../components/ui/Loader/Loader";
 import { Button } from "../../components/ui/Button/Button";
 import { useUI } from "../../context/UIContext";
@@ -20,6 +20,12 @@ import { Badge } from "../../components/ui/Badge/Badge";
 import { ProductFilters } from "../../types/product";
 
 const ITEMS_PER_BATCH = 9;
+
+type ActiveFilterToken =
+  | { kind: "query"; label: string }
+  | { kind: "category"; value: string; label: string }
+  | { kind: "inStock"; label: string }
+  | { kind: "price"; label: string };
 
 const areStringArraysEqual = (a: string[], b: string[]) =>
   a.length === b.length && a.every((value, index) => value === b[index]);
@@ -38,7 +44,7 @@ const areFiltersEqual = (a: ProductFilters, b: ProductFilters) => {
 };
 
 const parseFiltersFromSearchParams = (
-  searchParams: URLSearchParams
+  searchParams: URLSearchParams,
 ): ProductFilters => {
   const query = searchParams.get("query") ?? "";
   const categories = searchParams.getAll("category");
@@ -61,13 +67,11 @@ const parseFiltersFromSearchParams = (
     : minPrice;
 
   return {
+    ...defaultFilters,
     categories,
-    brands: [],
     priceRange: [clampedMin, maxPriceValue],
-    rating: null,
     inStockOnly,
     query,
-    tags: [],
   };
 };
 
@@ -112,7 +116,7 @@ const ProductListingPage = () => {
 
   const maxPrice = useMemo(() => {
     const prices = products.map(
-      (product) => product.salePrice ?? product.price
+      (product) => product.salePrice ?? product.price,
     );
     return prices.length > 0 ? Math.max(...prices) : 10000;
   }, [products]);
@@ -176,34 +180,38 @@ const ProductListingPage = () => {
     priceIsActive,
   ]);
 
-  const activeFilterLabels = useMemo(() => {
-    const labels: string[] = [];
+  const activeFilters = useMemo<ActiveFilterToken[]>(() => {
+    const tokens: ActiveFilterToken[] = [];
 
     const query = filters.query.trim();
     if (query.length > 0) {
-      labels.push(`Search: ${query}`);
+      tokens.push({ kind: "query", label: `Search: ${query}` });
     }
 
     if (filters.categories.length > 0) {
-      labels.push(...filters.categories);
+      filters.categories.forEach((category) => {
+        tokens.push({ kind: "category", value: category, label: category });
+      });
     }
 
     if (filters.inStockOnly) {
-      labels.push("In stock");
+      tokens.push({ kind: "inStock", label: "In stock" });
     }
 
     if (priceIsActive) {
       const maxDisplay = Number.isFinite(filters.priceRange[1])
         ? filters.priceRange[1]
         : maxPrice;
-      labels.push(
-        `Price: ${formatPrice(filters.priceRange[0])} - ${formatPrice(
-          maxDisplay
-        )}`
-      );
+
+      tokens.push({
+        kind: "price",
+        label: `Price: ${formatPrice(filters.priceRange[0])} - ${formatPrice(
+          maxDisplay,
+        )}`,
+      });
     }
 
-    return labels;
+    return tokens;
   }, [
     filters.categories,
     filters.inStockOnly,
@@ -213,8 +221,47 @@ const ProductListingPage = () => {
     priceIsActive,
   ]);
 
+  const handleRemoveActiveFilter = useCallback(
+    (filterToken: ActiveFilterToken) => {
+      setFilters((prev) => {
+        switch (filterToken.kind) {
+          case "query": {
+            if (prev.query.trim().length === 0) {
+              return prev;
+            }
+            return { ...prev, query: "" };
+          }
+          case "category": {
+            if (!prev.categories.includes(filterToken.value)) {
+              return prev;
+            }
+            return {
+              ...prev,
+              categories: prev.categories.filter(
+                (category) => category !== filterToken.value,
+              ),
+            };
+          }
+          case "inStock": {
+            if (!prev.inStockOnly) {
+              return prev;
+            }
+            return { ...prev, inStockOnly: false };
+          }
+          case "price": {
+            return { ...prev, priceRange: defaultFilters.priceRange };
+          }
+          default: {
+            return prev;
+          }
+        }
+      });
+    },
+    [setFilters],
+  );
+
   const [visibleCount, setVisibleCount] = useState(() =>
-    Math.min(ITEMS_PER_BATCH, filteredProducts.length)
+    Math.min(ITEMS_PER_BATCH, filteredProducts.length),
   );
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const hasMore = visibleCount < filteredProducts.length;
@@ -252,20 +299,37 @@ const ProductListingPage = () => {
           <p className={styles["page__subtitle"]}>
             {filteredProducts.length} pieces curated for you
           </p>
-          {activeFilterLabels.length > 0 ? (
+          {activeFilters.length > 0 ? (
             <div
               className={styles["page__active-filters"]}
               aria-label="Active filters"
             >
-              {activeFilterLabels.map((label) => (
-                <Badge
-                  key={label}
-                  size="sm"
-                  className={styles["page__active-filter"]}
-                >
-                  {label}
-                </Badge>
-              ))}
+              {activeFilters.map((filterToken) => {
+                const key =
+                  filterToken.kind === "category"
+                    ? `category:${filterToken.value}`
+                    : filterToken.kind;
+
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    className={styles["page__active-filterButton"]}
+                    onClick={() => handleRemoveActiveFilter(filterToken)}
+                    aria-label={`Remove filter: ${filterToken.label}`}
+                  >
+                    <Badge size="sm" className={styles["page__active-filter"]}>
+                      <span>{filterToken.label}</span>
+                      <span
+                        className={styles["page__active-filter-remove"]}
+                        aria-hidden="true"
+                      >
+                        ×
+                      </span>
+                    </Badge>
+                  </button>
+                );
+              })}
             </div>
           ) : null}
         </div>

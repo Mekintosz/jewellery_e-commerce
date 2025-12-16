@@ -10,7 +10,7 @@ const HomePage = () => {
 
   const featured = useMemo(
     () => filteredProducts.slice(0, 3),
-    [filteredProducts]
+    [filteredProducts],
   );
 
   const signatureCollections = [

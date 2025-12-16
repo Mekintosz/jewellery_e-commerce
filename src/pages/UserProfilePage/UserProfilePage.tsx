@@ -1,24 +1,46 @@
-import { useState } from 'react';
-import styles from './UserProfilePage.module.css';
-import { useAuth } from '../../context/AuthContext';
-import { Button } from '../../components/ui/Button/Button';
-import { Address } from '../../types/user';
+import { useState } from "react";
+import styles from "./UserProfilePage.module.css";
+import { useAuth } from "../../context/AuthContext";
+import { Button } from "../../components/ui/Button/Button";
+import { Address } from "../../types/user";
 
-type Section = 'profile' | 'orders' | 'shipping' | 'payments';
+type Section = "profile" | "orders" | "shipping" | "payments";
 
 const UserProfilePage = () => {
   const { user, logout } = useAuth();
-  const [activeSection, setActiveSection] = useState<Section>('profile');
+  const [activeSection, setActiveSection] = useState<Section>("profile");
 
   if (!user) {
-    return <p className={styles['page__empty']}>Please sign in to view your profile.</p>;
+    return (
+      <p className={styles["page__empty"]}>
+        Please sign in to view your profile.
+      </p>
+    );
   }
 
   // Mock orders data
   const orders = [
-    { id: '#34562', date: 'June 15, 2024', total: '$250.00', status: 'Delivered', statusClass: styles['status--delivered'] },
-    { id: '#34501', date: 'May 28, 2024', total: '$120.50', status: 'Shipped', statusClass: styles['status--shipped'] },
-    { id: '#34498', date: 'May 25, 2024', total: '$45.00', status: 'Processing', statusClass: styles['status--processing'] },
+    {
+      id: "#34562",
+      date: "June 15, 2024",
+      total: "$250.00",
+      status: "Delivered",
+      statusClass: styles["status--delivered"],
+    },
+    {
+      id: "#34501",
+      date: "May 28, 2024",
+      total: "$120.50",
+      status: "Shipped",
+      statusClass: styles["status--shipped"],
+    },
+    {
+      id: "#34498",
+      date: "May 25, 2024",
+      total: "$45.00",
+      status: "Processing",
+      statusClass: styles["status--processing"],
+    },
   ];
 
   return (
@@ -31,46 +53,69 @@ const UserProfilePage = () => {
           <div className={styles.sidebar__card}>
             <div className={styles.sidebar__user}>
               <div className={styles.sidebar__avatar}>
-                {user.firstName[0]}{user.lastName[0]}
+                {user.firstName[0]}
+                {user.lastName[0]}
               </div>
               <div className={styles.sidebar__info}>
-                <h2 className={styles.sidebar__name}>{user.firstName} {user.lastName}</h2>
+                <h2 className={styles.sidebar__name}>
+                  {user.firstName} {user.lastName}
+                </h2>
                 <p className={styles.sidebar__email}>{user.email}</p>
               </div>
             </div>
 
             <nav className={styles.sidebar__nav}>
               <button
-                className={`${styles.sidebar__link} ${activeSection === 'profile' ? styles['sidebar__link--active'] : ''}`}
-                onClick={() => setActiveSection('profile')}
+                className={`${styles.sidebar__link} ${
+                  activeSection === "profile"
+                    ? styles["sidebar__link--active"]
+                    : ""
+                }`}
+                onClick={() => setActiveSection("profile")}
               >
                 <span className={styles.sidebar__icon}>person</span>
                 <span>Profile</span>
               </button>
               <button
-                className={`${styles.sidebar__link} ${activeSection === 'orders' ? styles['sidebar__link--active'] : ''}`}
-                onClick={() => setActiveSection('orders')}
+                className={`${styles.sidebar__link} ${
+                  activeSection === "orders"
+                    ? styles["sidebar__link--active"]
+                    : ""
+                }`}
+                onClick={() => setActiveSection("orders")}
               >
-                <span className={styles.sidebar__icon}>shopping_bag</span>
+                <span className={styles.sidebar__icon}>shopping_cart</span>
                 <span>Orders</span>
               </button>
               <button
-                className={`${styles.sidebar__link} ${activeSection === 'shipping' ? styles['sidebar__link--active'] : ''}`}
-                onClick={() => setActiveSection('shipping')}
+                className={`${styles.sidebar__link} ${
+                  activeSection === "shipping"
+                    ? styles["sidebar__link--active"]
+                    : ""
+                }`}
+                onClick={() => setActiveSection("shipping")}
               >
                 <span className={styles.sidebar__icon}>local_shipping</span>
                 <span>Shipping Addresses</span>
               </button>
               <button
-                className={`${styles.sidebar__link} ${activeSection === 'payments' ? styles['sidebar__link--active'] : ''}`}
-                onClick={() => setActiveSection('payments')}
+                className={`${styles.sidebar__link} ${
+                  activeSection === "payments"
+                    ? styles["sidebar__link--active"]
+                    : ""
+                }`}
+                onClick={() => setActiveSection("payments")}
               >
                 <span className={styles.sidebar__icon}>payment</span>
                 <span>Payment Methods</span>
               </button>
             </nav>
 
-            <Button variant="primary" onClick={logout} className={styles.sidebar__logout}>
+            <Button
+              variant="primary"
+              onClick={logout}
+              className={styles.sidebar__logout}
+            >
               Sign Out
             </Button>
           </div>
@@ -79,13 +124,15 @@ const UserProfilePage = () => {
         {/* Main Content */}
         <div className={styles.content}>
           {/* Profile Section */}
-          {activeSection === 'profile' && (
+          {activeSection === "profile" && (
             <section className={styles.section}>
               <h2 className={styles.section__title}>Profile Information</h2>
               <form className={styles.form}>
                 <div className={styles.form__grid}>
                   <div className={styles.form__group}>
-                    <label className={styles.form__label} htmlFor="name">Full Name</label>
+                    <label className={styles.form__label} htmlFor="name">
+                      Full Name
+                    </label>
                     <input
                       className={styles.form__input}
                       id="name"
@@ -94,7 +141,9 @@ const UserProfilePage = () => {
                     />
                   </div>
                   <div className={styles.form__group}>
-                    <label className={styles.form__label} htmlFor="email">Email Address</label>
+                    <label className={styles.form__label} htmlFor="email">
+                      Email Address
+                    </label>
                     <input
                       className={styles.form__input}
                       id="email"
@@ -104,7 +153,9 @@ const UserProfilePage = () => {
                   </div>
                 </div>
                 <div className={styles.form__group}>
-                  <label className={styles.form__label} htmlFor="password">Change Password</label>
+                  <label className={styles.form__label} htmlFor="password">
+                    Change Password
+                  </label>
                   <input
                     className={styles.form__input}
                     id="password"
@@ -122,7 +173,7 @@ const UserProfilePage = () => {
           )}
 
           {/* Orders Section */}
-          {activeSection === 'orders' && (
+          {activeSection === "orders" && (
             <section className={styles.section}>
               <h2 className={styles.section__title}>My Orders</h2>
               <div className={styles.table__wrapper}>
@@ -143,12 +194,18 @@ const UserProfilePage = () => {
                         <td className={styles.table__cell}>{order.date}</td>
                         <td className={styles.table__cell}>{order.total}</td>
                         <td className={styles.table__cell}>
-                          <span className={`${styles.status} ${order.statusClass}`}>
+                          <span
+                            className={`${styles.status} ${order.statusClass}`}
+                          >
                             {order.status}
                           </span>
                         </td>
-                        <td className={`${styles.table__cell} ${styles['table__cell--actions']}`}>
-                          <a href="#" className={styles.table__link}>View Details</a>
+                        <td
+                          className={`${styles.table__cell} ${styles["table__cell--actions"]}`}
+                        >
+                          <a href="#" className={styles.table__link}>
+                            View Details
+                          </a>
                         </td>
                       </tr>
                     ))}
@@ -159,7 +216,7 @@ const UserProfilePage = () => {
           )}
 
           {/* Shipping Addresses Section */}
-          {activeSection === 'shipping' && (
+          {activeSection === "shipping" && (
             <section className={styles.section}>
               <div className={styles.section__header}>
                 <h2 className={styles.section__title}>Shipping Addresses</h2>
@@ -183,10 +240,16 @@ const UserProfilePage = () => {
                           </p>
                         </div>
                         <div className={styles.card__actions}>
-                          <button className={styles.card__button} aria-label="Edit">
+                          <button
+                            className={styles.card__button}
+                            aria-label="Edit"
+                          >
                             <span className={styles.card__icon}>edit</span>
                           </button>
-                          <button className={styles.card__button} aria-label="Delete">
+                          <button
+                            className={styles.card__button}
+                            aria-label="Delete"
+                          >
                             <span className={styles.card__icon}>delete</span>
                           </button>
                         </div>
@@ -199,7 +262,7 @@ const UserProfilePage = () => {
           )}
 
           {/* Payment Methods Section */}
-          {activeSection === 'payments' && (
+          {activeSection === "payments" && (
             <section className={styles.section}>
               <div className={styles.section__header}>
                 <h2 className={styles.section__title}>Payment Methods</h2>
@@ -212,7 +275,9 @@ const UserProfilePage = () => {
                 {user.paymentMethods.length === 0 ? (
                   <div className={styles.card__empty}>
                     <span className={styles.card__empty__icon}>add_card</span>
-                    <p className={styles.card__empty__text}>You have no payment methods.</p>
+                    <p className={styles.card__empty__text}>
+                      You have no payment methods.
+                    </p>
                   </div>
                 ) : (
                   user.paymentMethods.map((method) => (
@@ -227,10 +292,16 @@ const UserProfilePage = () => {
                           </p>
                         </div>
                         <div className={styles.card__actions}>
-                          <button className={styles.card__button} aria-label="Edit">
+                          <button
+                            className={styles.card__button}
+                            aria-label="Edit"
+                          >
                             <span className={styles.card__icon}>edit</span>
                           </button>
-                          <button className={styles.card__button} aria-label="Delete">
+                          <button
+                            className={styles.card__button}
+                            aria-label="Delete"
+                          >
                             <span className={styles.card__icon}>delete</span>
                           </button>
                         </div>

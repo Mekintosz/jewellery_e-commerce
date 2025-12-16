@@ -101,7 +101,9 @@
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s, color 0.2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
   text-align: left;
   width: 100%;
 }
@@ -117,7 +119,7 @@
 
 .sidebar__icon {
   font-family: "Material Symbols Outlined";
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   font-weight: normal;
   font-style: normal;
   line-height: 1;
@@ -210,7 +212,9 @@
   background-color: var(--color-surface-secondary);
   color: var(--color-text-strong);
   font-size: 1rem;
-  transition: border-color 0.2s, background-color 0.2s;
+  transition:
+    border-color 0.2s,
+    background-color 0.2s;
 }
 
 .form__input:focus {

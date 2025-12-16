@@ -39,8 +39,35 @@
   margin-top: 0.75rem;
 }
 
+.page__active-filterButton {
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  display: inline-flex;
+}
+
+.page__active-filterButton:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+  border-radius: 999px;
+}
+
 .page__active-filter {
   letter-spacing: 0.08em;
+  gap: 0.35rem;
+}
+
+.page__active-filter-remove {
+  opacity: 0.75;
+  font-size: 0.85em;
+  line-height: 1;
+}
+
+.page__active-filterButton:hover .page__active-filter-remove {
+  opacity: 1;
 }
 
 .page__actions {
