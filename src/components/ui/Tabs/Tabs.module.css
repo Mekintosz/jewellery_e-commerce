@@ -20,7 +20,9 @@
   font-weight: 600;
   color: var(--color-text-secondary);
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .tabs__tab:hover {

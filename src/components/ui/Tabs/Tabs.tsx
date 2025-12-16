@@ -8,10 +8,10 @@ import {
   useContext,
   useId,
   useMemo,
-  useState
-} from 'react';
-import clsx from 'clsx';
-import styles from './Tabs.module.css';
+  useState,
+} from "react";
+import clsx from "clsx";
+import styles from "./Tabs.module.css";
 
 type TabsContextValue = {
   activeIndex: number;
@@ -30,7 +30,10 @@ type TabsProps = {
 export const Tabs = ({ children, defaultIndex = 0, className }: TabsProps) => {
   const [activeIndex, setActiveIndex] = useState(defaultIndex);
   const tabsId = useId();
-  const contextValue = useMemo(() => ({ activeIndex, setActiveIndex, tabsId }), [activeIndex, tabsId]);
+  const contextValue = useMemo(
+    () => ({ activeIndex, setActiveIndex, tabsId }),
+    [activeIndex, tabsId],
+  );
 
   return (
     <TabsContext.Provider value={contextValue}>
@@ -45,7 +48,7 @@ type TabListProps = {
 };
 
 export const TabList = ({ children, className }: TabListProps) => (
-  <div className={clsx(styles['tabs__list'], className)} role="tablist">
+  <div className={clsx(styles["tabs__list"], className)} role="tablist">
     {children}
   </div>
 );
@@ -69,32 +72,15 @@ export const Tab = ({ children, index, className }: TabProps) => {
       id={id}
       aria-selected={isActive}
       aria-controls={panelId}
-      className={clsx(styles['tabs__tab'], { [styles['tabs__tab--active']]: isActive }, className)}
+      className={clsx(
+        styles["tabs__tab"],
+        { [styles["tabs__tab--active"]]: isActive },
+        className,
+      )}
       onClick={() => context.setActiveIndex(index)}
     >
       {children}
     </button>
-  );
-};
-
-type TabPanelsProps = {
-  children: ReactNode;
-  className?: string;
-};
-
-export const TabPanels = ({ children, className }: TabPanelsProps) => {
-  const context = useTabsContext();
-  const childrenArray = Children.toArray(children) as ReactElement[];
-
-  return (
-    <div className={clsx(styles['tabs__panels'], className)}>
-      {childrenArray.map((child, index) => {
-        if (!isValidElement(child)) {
-          return null;
-        }
-        return cloneElement(child, { index, key: child.key ?? index, isActive: context.activeIndex === index });
-      })}
-    </div>
   );
 };
 
@@ -105,7 +91,36 @@ type TabPanelProps = {
   className?: string;
 };
 
-export const TabPanel = ({ children, index = 0, isActive = false, className }: TabPanelProps) => {
+type TabPanelsProps = {
+  children: ReactNode;
+  className?: string;
+};
+
+export const TabPanels = ({ children, className }: TabPanelsProps) => {
+  const context = useTabsContext();
+  const childrenArray = Children.toArray(children).filter(
+    isValidElement,
+  ) as ReactElement<TabPanelProps>[];
+
+  return (
+    <div className={clsx(styles["tabs__panels"], className)}>
+      {childrenArray.map((child, index) => {
+        return cloneElement(child, {
+          index,
+          key: child.key ?? index,
+          isActive: context.activeIndex === index,
+        });
+      })}
+    </div>
+  );
+};
+
+export const TabPanel = ({
+  children,
+  index = 0,
+  isActive = false,
+  className,
+}: TabPanelProps) => {
   const context = useTabsContext();
   const id = `${context.tabsId}-panel-${index}`;
   const tabId = `${context.tabsId}-tab-${index}`;
@@ -116,7 +131,7 @@ export const TabPanel = ({ children, index = 0, isActive = false, className }: T
       id={id}
       aria-labelledby={tabId}
       hidden={!isActive}
-      className={clsx(styles['tabs__panel'], className)}
+      className={clsx(styles["tabs__panel"], className)}
     >
       {children}
     </div>
@@ -126,7 +141,7 @@ export const TabPanel = ({ children, index = 0, isActive = false, className }: T
 const useTabsContext = () => {
   const context = useContext(TabsContext);
   if (!context) {
-    throw new Error('Tabs components must be rendered within Tabs');
+    throw new Error("Tabs components must be rendered within Tabs");
   }
   return context;
 };

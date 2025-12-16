@@ -22,7 +22,7 @@ export const Badge = ({
       styles.badge,
       styles[`badge--${variant}`],
       styles[`badge--${size}`],
-      className
+      className,
     )}
   >
     {children}

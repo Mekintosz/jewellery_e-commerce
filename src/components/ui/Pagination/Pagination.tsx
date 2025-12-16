@@ -1,6 +1,6 @@
-import clsx from 'clsx';
-import styles from './Pagination.module.css';
-import { Button } from '../Button/Button';
+import clsx from "clsx";
+import styles from "./Pagination.module.css";
+import { Button } from "../Button/Button";
 
 type PaginationProps = {
   currentPage: number;
@@ -8,9 +8,14 @@ type PaginationProps = {
   onPageChange: (page: number) => void;
 };
 
-const range = (start: number, end: number) => Array.from({ length: end - start + 1 }, (_, i) => start + i);
+const range = (start: number, end: number) =>
+  Array.from({ length: end - start + 1 }, (_, i) => start + i);
 
-export const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) => {
+export const Pagination = ({
+  currentPage,
+  totalPages,
+  onPageChange,
+}: PaginationProps) => {
   if (totalPages <= 1) {
     return null;
   }
@@ -30,16 +35,16 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
       >
         ‹
       </Button>
-      <ul className={styles['pagination__list']}>
+      <ul className={styles["pagination__list"]}>
         {pages.map((page) => (
           <li key={page}>
             <button
               type="button"
-              className={clsx(styles['pagination__item'], {
-                [styles['pagination__item--active']]: page === currentPage
+              className={clsx(styles["pagination__item"], {
+                [styles["pagination__item--active"]]: page === currentPage,
               })}
               onClick={() => onPageChange(page)}
-              aria-current={page === currentPage ? 'page' : undefined}
+              aria-current={page === currentPage ? "page" : undefined}
             >
               {page}
             </button>

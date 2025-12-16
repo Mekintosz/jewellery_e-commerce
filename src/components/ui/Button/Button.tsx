@@ -29,7 +29,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       type = "button",
       ...props
     },
-    ref
+    ref,
   ) => (
     <button
       ref={ref}
@@ -42,7 +42,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           [styles["button--full"]]: isFullWidth,
           [styles["button--loading"]]: isLoading,
         },
-        className
+        className,
       )}
       disabled={disabled ?? isLoading}
       {...props}
@@ -58,7 +58,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         <span className={styles["button__spinner"]} aria-hidden="true" />
       ) : null}
     </button>
-  )
+  ),
 );
 
 Button.displayName = "Button";

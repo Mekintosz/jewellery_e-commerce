@@ -1,7 +1,7 @@
-import clsx from 'clsx';
-import styles from './Alert.module.css';
+import clsx from "clsx";
+import styles from "./Alert.module.css";
 
-type AlertVariant = 'success' | 'error' | 'info';
+type AlertVariant = "success" | "error" | "info";
 
 type AlertProps = {
   title: string;
@@ -11,12 +11,23 @@ type AlertProps = {
   className?: string;
 };
 
-export const Alert = ({ title, description, variant = 'info', action, className }: AlertProps) => (
-  <div className={clsx(styles.alert, styles[`alert--${variant}`], className)} role="status">
+export const Alert = ({
+  title,
+  description,
+  variant = "info",
+  action,
+  className,
+}: AlertProps) => (
+  <div
+    className={clsx(styles.alert, styles[`alert--${variant}`], className)}
+    role="status"
+  >
     <div>
-      <p className={styles['alert__title']}>{title}</p>
-      {description ? <p className={styles['alert__description']}>{description}</p> : null}
+      <p className={styles["alert__title"]}>{title}</p>
+      {description ? (
+        <p className={styles["alert__description"]}>{description}</p>
+      ) : null}
     </div>
-    {action ? <div className={styles['alert__action']}>{action}</div> : null}
+    {action ? <div className={styles["alert__action"]}>{action}</div> : null}
   </div>
 );
