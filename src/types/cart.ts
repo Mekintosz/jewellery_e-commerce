@@ -1,4 +1,4 @@
-import { ProductVariantOption } from './product';
+import { ProductVariantOption } from "./product";
 
 export type CartItem = {
   productId: string;

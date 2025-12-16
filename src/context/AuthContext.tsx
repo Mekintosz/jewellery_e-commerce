@@ -4,11 +4,11 @@ import {
   useCallback,
   useContext,
   useMemo,
-  useState
-} from 'react';
-import { AuthState, UserProfile } from '../types/user';
-import { useLocalStorage } from '../hooks/useLocalStorage';
-import { authService } from '../services/authService';
+  useState,
+} from "react";
+import { AuthState, UserProfile } from "../types/user";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import { authService } from "../services/authService";
 
 type AuthContextValue = AuthState & {
   login: (email: string, password: string) => Promise<void>;
@@ -16,16 +16,20 @@ type AuthContextValue = AuthState & {
   refreshProfile: () => Promise<void>;
 };
 
-const AUTH_STORAGE_KEY = 'jewellery-auth';
+const AUTH_STORAGE_KEY = "jewellery-auth";
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const { value: storedAuth, setValue, remove } = useLocalStorage<AuthState>(AUTH_STORAGE_KEY, {
+  const {
+    value: storedAuth,
+    setValue,
+    remove,
+  } = useLocalStorage<AuthState>(AUTH_STORAGE_KEY, {
     isAuthenticated: false,
     token: null,
     user: null,
-    isLoading: false
+    isLoading: false,
   });
 
   const [state, setState] = useState<AuthState>(storedAuth);
@@ -35,7 +39,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setValue(nextState);
       setState(nextState);
     },
-    [setValue]
+    [setValue],
   );
 
   const login = useCallback(
@@ -47,15 +51,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           isAuthenticated: true,
           token,
           user,
-          isLoading: false
+          isLoading: false,
         };
         syncState(nextState);
       } catch (error) {
-        syncState({ ...state, isAuthenticated: false, token: null, user: null, isLoading: false });
+        syncState({
+          ...state,
+          isAuthenticated: false,
+          token: null,
+          user: null,
+          isLoading: false,
+        });
         throw error;
       }
     },
-    [state, syncState]
+    [state, syncState],
   );
 
   const logout = useCallback(() => {
@@ -64,7 +74,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       isAuthenticated: false,
       token: null,
       user: null,
-      isLoading: false
+      isLoading: false,
     });
   }, [remove]);
 
@@ -79,7 +89,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       syncState({
         ...state,
         user: profile,
-        isLoading: false
+        isLoading: false,
       });
     } catch {
       logout();
@@ -91,9 +101,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       ...state,
       login,
       logout,
-      refreshProfile
+      refreshProfile,
     }),
-    [login, logout, refreshProfile, state]
+    [login, logout, refreshProfile, state],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
@@ -102,7 +112,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within AuthProvider');
+    throw new Error("useAuth must be used within AuthProvider");
   }
   return context;
 };

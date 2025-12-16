@@ -1,6 +1,6 @@
-export type ModalType = 'cart' | 'menu' | 'auth' | 'filter' | 'none';
+export type ModalType = "cart" | "menu" | "auth" | "filter" | "none";
 
-export type ToastVariant = 'success' | 'error' | 'info';
+export type ToastVariant = "success" | "error" | "info";
 
 export type ToastMessage = {
   id: string;

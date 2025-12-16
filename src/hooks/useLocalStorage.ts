@@ -11,7 +11,7 @@ const defaultDeserializer = <T>(value: string): T => JSON.parse(value) as T;
 export const useLocalStorage = <T>(
   key: string,
   initialValue: T,
-  options: UseLocalStorageOptions<T> = {}
+  options: UseLocalStorageOptions<T> = {},
 ) => {
   const { serializer = defaultSerializer, deserializer = defaultDeserializer } =
     options;

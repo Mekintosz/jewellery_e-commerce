@@ -1,4 +1,4 @@
-import { RefObject, useEffect } from 'react';
+import { RefObject, useEffect } from "react";
 
 type UseInfiniteScrollParams = {
   target: RefObject<Element>;
@@ -14,8 +14,8 @@ export const useInfiniteScroll = ({
   onIntersect,
   enabled = true,
   root = null,
-  rootMargin = '0px',
-  threshold = 0.1
+  rootMargin = "0px",
+  threshold = 0.1,
 }: UseInfiniteScrollParams) => {
   useEffect(() => {
     if (!enabled) {
@@ -35,7 +35,7 @@ export const useInfiniteScroll = ({
           }
         });
       },
-      { root, rootMargin, threshold }
+      { root, rootMargin, threshold },
     );
 
     observer.observe(node);

@@ -1,5 +1,11 @@
-import { createContext, ReactNode, useCallback, useContext, useMemo } from 'react';
-import { useLocalStorage } from '../hooks/useLocalStorage';
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useMemo,
+} from "react";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 type WishlistContextValue = {
   items: string[];
@@ -10,12 +16,17 @@ type WishlistContextValue = {
   clear: () => void;
 };
 
-const WISHLIST_STORAGE_KEY = 'jewellery-wishlist';
+const WISHLIST_STORAGE_KEY = "jewellery-wishlist";
 
-const WishlistContext = createContext<WishlistContextValue | undefined>(undefined);
+const WishlistContext = createContext<WishlistContextValue | undefined>(
+  undefined,
+);
 
 export const WishlistProvider = ({ children }: { children: ReactNode }) => {
-  const { value, setValue } = useLocalStorage<string[]>(WISHLIST_STORAGE_KEY, []);
+  const { value, setValue } = useLocalStorage<string[]>(
+    WISHLIST_STORAGE_KEY,
+    [],
+  );
 
   const addItem = useCallback(
     (productId: string) => {
@@ -24,14 +35,14 @@ export const WishlistProvider = ({ children }: { children: ReactNode }) => {
       }
       setValue([...value, productId]);
     },
-    [setValue, value]
+    [setValue, value],
   );
 
   const removeItem = useCallback(
     (productId: string) => {
       setValue(value.filter((id) => id !== productId));
     },
-    [setValue, value]
+    [setValue, value],
   );
 
   const toggleItem = useCallback(
@@ -42,10 +53,13 @@ export const WishlistProvider = ({ children }: { children: ReactNode }) => {
         addItem(productId);
       }
     },
-    [addItem, removeItem, value]
+    [addItem, removeItem, value],
   );
 
-  const isInWishlist = useCallback((productId: string) => value.includes(productId), [value]);
+  const isInWishlist = useCallback(
+    (productId: string) => value.includes(productId),
+    [value],
+  );
 
   const clear = useCallback(() => {
     setValue([]);
@@ -58,18 +72,22 @@ export const WishlistProvider = ({ children }: { children: ReactNode }) => {
       removeItem,
       toggleItem,
       isInWishlist,
-      clear
+      clear,
     }),
-    [addItem, clear, isInWishlist, removeItem, toggleItem, value]
+    [addItem, clear, isInWishlist, removeItem, toggleItem, value],
   );
 
-  return <WishlistContext.Provider value={contextValue}>{children}</WishlistContext.Provider>;
+  return (
+    <WishlistContext.Provider value={contextValue}>
+      {children}
+    </WishlistContext.Provider>
+  );
 };
 
 export const useWishlist = () => {
   const context = useContext(WishlistContext);
   if (!context) {
-    throw new Error('useWishlist must be used within WishlistProvider');
+    throw new Error("useWishlist must be used within WishlistProvider");
   }
   return context;
 };

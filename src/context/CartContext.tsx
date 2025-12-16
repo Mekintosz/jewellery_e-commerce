@@ -30,13 +30,16 @@ type CartContextValue = {
   coupon: Coupon | null;
   addItem: (
     product: Product,
-    item: Omit<CartItem, "name" | "price" | "image" | "maxQuantity">
+    item: Omit<
+      CartItem,
+      "productId" | "name" | "price" | "image" | "maxQuantity"
+    >,
   ) => void;
   removeItem: (productId: string, variantKey: string) => void;
   updateQuantity: (
     productId: string,
     variantKey: string,
-    quantity: number
+    quantity: number,
   ) => void;
   applyCoupon: (coupon: Coupon | null) => void;
   clearCart: () => void;
@@ -56,7 +59,7 @@ const reduceCart = (state: CartState, action: CartAction): CartState => {
       const existingIndex = state.items.findIndex(
         (item) =>
           item.productId === incoming.productId &&
-          createVariantKey(item.variant) === key
+          createVariantKey(item.variant) === key,
       );
 
       if (existingIndex >= 0) {
@@ -64,7 +67,7 @@ const reduceCart = (state: CartState, action: CartAction): CartState => {
         const existing = nextItems[existingIndex];
         const newQuantity = Math.min(
           existing.maxQuantity,
-          existing.quantity + incoming.quantity
+          existing.quantity + incoming.quantity,
         );
         nextItems[existingIndex] = { ...existing, quantity: newQuantity };
         return { ...state, items: nextItems };
@@ -81,7 +84,7 @@ const reduceCart = (state: CartState, action: CartAction): CartState => {
             !(
               item.productId === productId &&
               createVariantKey(item.variant) === key
-            )
+            ),
         ),
       };
     }
@@ -112,7 +115,7 @@ const reduceCart = (state: CartState, action: CartAction): CartState => {
 
 const calculateSummary = (
   items: CartItem[],
-  coupon: Coupon | null
+  coupon: Coupon | null,
 ): CartSummary => {
   const subtotal = items.reduce((acc, item) => {
     const price = item.salePrice ?? item.price;
@@ -139,7 +142,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     {
       items: [],
       coupon: null,
-    }
+    },
   );
 
   const [state, dispatch] = useReducer(reduceCart, storedCart);
@@ -149,7 +152,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       setValue(nextState);
       return nextState;
     },
-    [setValue]
+    [setValue],
   );
 
   const dispatchAndPersist = useCallback(
@@ -158,13 +161,16 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       persist(nextState);
       dispatch(action);
     },
-    [persist, state]
+    [persist, state],
   );
 
   const actions = useMemo(() => {
     const addItem = (
       product: Product,
-      item: Omit<CartItem, "name" | "price" | "image" | "maxQuantity">
+      item: Omit<
+        CartItem,
+        "productId" | "name" | "price" | "image" | "maxQuantity"
+      >,
     ) => {
       const payload: CartItem = {
         productId: product.id,
@@ -188,7 +194,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     const updateQuantity = (
       productId: string,
       key: string,
-      quantity: number
+      quantity: number,
     ) => {
       dispatchAndPersist({
         type: "UPDATE_QUANTITY",
@@ -215,7 +221,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const summary = useMemo(
     () => calculateSummary(state.items, state.coupon),
-    [state.coupon, state.items]
+    [state.coupon, state.items],
   );
 
   const contextValue = useMemo<CartContextValue>(
@@ -225,7 +231,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       summary,
       ...actions,
     }),
-    [actions, state.coupon, state.items, summary]
+    [actions, state.coupon, state.items, summary],
   );
 
   return (
