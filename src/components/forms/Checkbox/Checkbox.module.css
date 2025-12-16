@@ -24,7 +24,9 @@
   border-radius: 0.3rem;
   border: 2px solid var(--color-border);
   background-color: var(--color-surface-primary);
-  transition: border-color 0.2s ease, background-color 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
 }
 
 .checkbox__input:checked + .checkbox__box {
