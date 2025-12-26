@@ -1,10 +1,10 @@
 # Jewellery E-Commerce
 
-Responsive jewellery e-commerce experience built with React 19 (RC) and Vite. The application showcases a premium storefront with end-to-end shopping flows, authentication scaffolding, modular CSS styling, and reusable UI primitives.
+Responsive jewellery e-commerce experience built with React 19 and Vite. The application showcases a premium storefront with end-to-end shopping flows, authentication scaffolding, modular CSS styling, and reusable UI primitives.
 
 ## Features
 
-- **Modern stack**: React 19 RC, Vite 5, TypeScript, React Router (data APIs), modular CSS with BEM naming.
+- **Modern stack**: React 19, Vite 7, TypeScript, React Router (data APIs), modular CSS with BEM naming.
 - **Global state**: Context-powered cart, wishlist, authentication, UI, and product catalogue state with localStorage persistence.
 - **Shopping flow**: Product discovery, advanced filtering/sorting, detailed product pages, cart management, promo codes, and a gated checkout experience.
 - **Reusable UI kit**: Buttons, inputs, selects, modals, alerts, badges, cards, pagination, rating, tabs, and loaders built with accessibility-first semantics.
@@ -21,10 +21,10 @@ npm run dev
 
 ### Scripts
 
-- `npm run dev` – Start the Vite development server
-- `npm run build` – Create an optimized production build
-- `npm run preview` – Preview the production build locally
-- `npm run lint` – Run ESLint across the codebase
+- `npm run dev` - Start the Vite development server
+- `npm run build` - Create an optimized production build
+- `npm run preview` - Preview the production build locally
+- `npm run lint` - Run ESLint across the codebase
 
 ## Project Structure
 

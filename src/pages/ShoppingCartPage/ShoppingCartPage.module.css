@@ -1,9 +1,6 @@
 .page {
-  max-width: 80rem;
+  max-width: 60rem;
   margin: 0 auto;
-}
-
-.page {
   display: grid;
   gap: 2.5rem;
 }
@@ -64,7 +61,7 @@
   align-items: center;
   justify-content: center;
   padding: 0.85rem 1.5rem;
-  border-radius: 999px;
+  border-radius: 5px;
   background-color: var(--color-primary);
   color: var(--color-text-on-primary);
   font-weight: 600;
