@@ -89,7 +89,7 @@ export const ProductFilter = () => {
     <aside className={styles.filter}>
       <div className={styles["filter__header"]}>
         <h2 className={styles["filter__title"]}>Filter</h2>
-        <Button variant="ghost" size="sm" onClick={clearFilters}>
+        <Button variant="secondary" size="sm" onClick={clearFilters}>
           Clear
         </Button>
       </div>

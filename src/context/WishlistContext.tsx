@@ -28,14 +28,17 @@ export const WishlistProvider = ({ children }: { children: ReactNode }) => {
     [],
   );
 
+  // Optimize lookups by creating a Set for O(1) complexity instead of O(n)
+  const itemsSet = useMemo(() => new Set(value), [value]);
+
   const addItem = useCallback(
     (productId: string) => {
-      if (value.includes(productId)) {
+      if (itemsSet.has(productId)) {
         return;
       }
       setValue([...value, productId]);
     },
-    [setValue, value],
+    [setValue, value, itemsSet],
   );
 
   const removeItem = useCallback(
@@ -47,18 +50,18 @@ export const WishlistProvider = ({ children }: { children: ReactNode }) => {
 
   const toggleItem = useCallback(
     (productId: string) => {
-      if (value.includes(productId)) {
+      if (itemsSet.has(productId)) {
         removeItem(productId);
       } else {
         addItem(productId);
       }
     },
-    [addItem, removeItem, value],
+    [addItem, removeItem, itemsSet],
   );
 
   const isInWishlist = useCallback(
-    (productId: string) => value.includes(productId),
-    [value],
+    (productId: string) => itemsSet.has(productId),
+    [itemsSet],
   );
 
   const clear = useCallback(() => {

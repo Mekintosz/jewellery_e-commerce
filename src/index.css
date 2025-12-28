@@ -5,14 +5,17 @@
   --color-primary-soft: rgba(42, 0, 82, 0.08);
   --color-text-strong: rgb(35, 27, 46);
   --color-text: rgb(55, 65, 81);
+  --color-text-secondary: rgb(107, 114, 128);
   --color-text-muted: rgb(107, 114, 128);
   --color-surface: rgb(255, 255, 255);
+  --color-surface-primary: rgb(249, 247, 250);
   --color-surface-alt: rgb(246, 244, 247);
-  --color-surface-secondary: rgb(246, 244, 247);
+  --color-surface-secondary: rgb(246, 242, 248);
   --color-surface-tertiary: rgb(235, 230, 242);
   --color-border: rgba(31, 41, 55, 0.267);
   --color-border-strong: rgba(31, 41, 55, 0.18);
   --color-text-on-primary: rgb(255, 255, 255);
+  --color-focus: rgb(47, 0, 90);
   --color-success: rgb(31, 111, 91);
   --color-danger: rgb(163, 52, 70);
   --color-warning: rgb(212, 157, 54);

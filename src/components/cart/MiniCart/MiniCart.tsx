@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import styles from "./MiniCart.module.css";
 import { useCart, createVariantKey } from "../../../context/CartContext";
 import { formatCurrency } from "../../../utils/currency";
+import { formatVariantLabel } from "../utils";
 
 type MiniCartProps = {
   isOpen: boolean;
@@ -34,74 +35,77 @@ export const MiniCart = ({ isOpen, onClose }: MiniCartProps) => {
           </p>
         ) : (
           <ul className={styles["mini-cart__list"]}>
-            {items.map((item) => (
-              <li
-                key={`${item.productId}-${createVariantKey(item.variant)}`}
-                className={styles["mini-cart__item"]}
-              >
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className={styles["mini-cart__image"]}
-                  loading="lazy"
-                />
-                <div className={styles["mini-cart__details"]}>
-                  <p className={styles["mini-cart__name"]}>{item.name}</p>
-                  <p className={styles["mini-cart__variant"]}>
-                    {item.variant.size ? `Size: ${item.variant.size}` : null}
-                    {item.variant.color
-                      ? ` · Color: ${item.variant.color}`
-                      : null}
-                  </p>
-                  <div className={styles["mini-cart__controls"]}>
-                    <div className={styles["mini-cart__quantity"]}>
+            {items.map((item) => {
+              const variantKey = createVariantKey(item.variant);
+              const variantLabel = formatVariantLabel(item.variant);
+              const isDecreaseDisabled = item.quantity <= 1;
+              const isIncreaseDisabled = item.quantity >= item.maxQuantity;
+              const handleDecrease = () => {
+                if (isDecreaseDisabled) {
+                  return;
+                }
+                updateQuantity(item.productId, variantKey, item.quantity - 1);
+              };
+              const handleIncrease = () => {
+                if (isIncreaseDisabled) {
+                  return;
+                }
+                updateQuantity(item.productId, variantKey, item.quantity + 1);
+              };
+
+              return (
+                <li
+                  key={`${item.productId}-${variantKey}`}
+                  className={styles["mini-cart__item"]}
+                >
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className={styles["mini-cart__image"]}
+                    loading="lazy"
+                  />
+                  <div className={styles["mini-cart__details"]}>
+                    <p className={styles["mini-cart__name"]}>{item.name}</p>
+                    {variantLabel ? (
+                      <p className={styles["mini-cart__variant"]}>
+                        {variantLabel}
+                      </p>
+                    ) : null}
+                    <div className={styles["mini-cart__controls"]}>
+                      <div className={styles["mini-cart__quantity"]}>
+                        <button
+                          type="button"
+                          disabled={isDecreaseDisabled}
+                          onClick={handleDecrease}
+                          aria-label="Decrease quantity"
+                        >
+                          -
+                        </button>
+                        <span>{item.quantity}</span>
+                        <button
+                          type="button"
+                          disabled={isIncreaseDisabled}
+                          onClick={handleIncrease}
+                          aria-label="Increase quantity"
+                        >
+                          +
+                        </button>
+                      </div>
                       <button
                         type="button"
-                        onClick={() =>
-                          updateQuantity(
-                            item.productId,
-                            createVariantKey(item.variant),
-                            item.quantity - 1,
-                          )
-                        }
-                        aria-label="Decrease quantity"
+                        className={styles["mini-cart__remove"]}
+                        onClick={() => removeItem(item.productId, variantKey)}
                       >
-                        −
-                      </button>
-                      <span>{item.quantity}</span>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          updateQuantity(
-                            item.productId,
-                            createVariantKey(item.variant),
-                            item.quantity + 1,
-                          )
-                        }
-                        aria-label="Increase quantity"
-                      >
-                        +
+                        Remove
                       </button>
                     </div>
-                    <button
-                      type="button"
-                      className={styles["mini-cart__remove"]}
-                      onClick={() =>
-                        removeItem(
-                          item.productId,
-                          createVariantKey(item.variant),
-                        )
-                      }
-                    >
-                      Remove
-                    </button>
                   </div>
-                </div>
-                <p className={styles["mini-cart__price"]}>
-                  {formatCurrency(item.salePrice ?? item.price)}
-                </p>
-              </li>
-            ))}
+                  <p className={styles["mini-cart__price"]}>
+                    {formatCurrency(item.salePrice ?? item.price)}
+                  </p>
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>

@@ -52,6 +52,7 @@
   border: 1px solid rgba(42, 0, 82, 0.2);
   border-radius: 0.5rem;
   text-align: center;
+  background-color: var(--color-surface-primary);
 }
 
 .info-card__icon {
@@ -80,7 +81,7 @@
 
 .info-card__text {
   margin: 0;
-  font-size: 1rem;
+  font-size: 0.9rem;
   line-height: 1.5;
   font-weight: 400;
   color: var(--color-text-secondary);
@@ -112,10 +113,9 @@
 
 /* Section Titles */
 .section-title {
-  margin: 0;
-  padding-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
   padding-top: 1.25rem;
-  font-size: 2.25rem;
+  font-size: 2rem;
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: -0.015em;

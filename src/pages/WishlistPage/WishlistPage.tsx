@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useMemo } from "react";
 import styles from "./WishlistPage.module.css";
 import { useWishlist } from "../../context/WishlistContext";
 import { useProducts } from "../../context/ProductContext";
@@ -7,8 +8,12 @@ import { ProductCard } from "../../components/product/ProductCard/ProductCard";
 const WishlistPage = () => {
   const { items } = useWishlist();
   const { products } = useProducts();
+  
+  // Optimize lookups by using a Set for O(1) complexity instead of O(n)
+  const wishlistIds = useMemo(() => new Set(items), [items]);
+  
   const wishlistProducts = products.filter((product) =>
-    items.includes(product.id),
+    wishlistIds.has(product.id),
   );
 
   return (

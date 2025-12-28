@@ -1,9 +1,27 @@
 import { useMemo } from "react";
+import { Link } from "react-router-dom";
 import styles from "./HomePage.module.css";
-import { Button } from "../../components/ui/Button/Button";
 import { ProductGrid } from "../../components/product/ProductGrid/ProductGrid";
 import { useProducts } from "../../context/ProductContext";
 import { Loader } from "../../components/ui/Loader/Loader";
+
+const signatureCollections = [
+  {
+    title: "The Artisan Collection",
+    image: "/images/collection-artisan.png",
+    linkLabel: "Shop Now",
+  },
+  {
+    title: "The Minimalist Collection",
+    image: "/images/collection-minimalist.png",
+    linkLabel: "Shop Now",
+  },
+  {
+    title: "The Bohemian Collection",
+    image: "/images/collection-bohemian.png",
+    linkLabel: "Shop Now",
+  },
+];
 
 const HomePage = () => {
   const { filteredProducts, isLoading } = useProducts();
@@ -13,24 +31,6 @@ const HomePage = () => {
     [filteredProducts],
   );
 
-  const signatureCollections = [
-    {
-      title: "The Artisan Collection",
-      image: "/images/collection-artisan.png",
-      linkLabel: "Shop Now",
-    },
-    {
-      title: "The Minimalist Collection",
-      image: "/images/collection-minimalist.png",
-      linkLabel: "Shop Now",
-    },
-    {
-      title: "The Bohemian Collection",
-      image: "/images/collection-bohemian.png",
-      linkLabel: "Shop Now",
-    },
-  ];
-
   return (
     <div className={styles.page}>
       <section className={styles.hero}>
@@ -39,9 +39,9 @@ const HomePage = () => {
         </div>
         <div className={styles["hero__panel"]}>
           <h1 className={styles["hero__title"]}>The Art of Adornment</h1>
-          <Button variant="primary" size="lg">
+          <Link to="/products" className={styles["hero__button"]}>
             Shop Now
-          </Button>
+          </Link>
         </div>
       </section>
 
@@ -63,9 +63,9 @@ const HomePage = () => {
                 />
               </div>
               <p className={styles["collections__name"]}>{collection.title}</p>
-              <a href="/products" className={styles["collections__link"]}>
+              <Link to="/products" className={styles["collections__link"]}>
                 {collection.linkLabel}
-              </a>
+              </Link>
             </article>
           ))}
         </div>

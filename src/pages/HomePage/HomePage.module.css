@@ -43,6 +43,31 @@
   line-height: 1.1;
 }
 
+.hero__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2rem;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1.125rem;
+  letter-spacing: 0.025em;
+  border-radius: 0.25rem;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  text-shadow: none;
+}
+
+.hero__button:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-1px);
+}
+
+.hero__button:active {
+  transform: translateY(0);
+}
+
 .collections {
   display: grid;
   gap: 3rem;

@@ -19,8 +19,13 @@ export const CartSummary = () => {
   const [error, setError] = useState("");
 
   const handleApply = () => {
+    const trimmedCode = code.trim();
+    if (!trimmedCode) {
+      setError("");
+      return;
+    }
     const couponData =
-      MOCK_COUPONS[code.toUpperCase() as keyof typeof MOCK_COUPONS];
+      MOCK_COUPONS[trimmedCode.toUpperCase() as keyof typeof MOCK_COUPONS];
     if (!couponData) {
       setError("Invalid coupon code");
       return;
@@ -28,6 +33,8 @@ export const CartSummary = () => {
     applyCoupon(couponData);
     setError("");
   };
+
+  const isApplyDisabled = !code.trim();
 
   return (
     <section className={styles.summary}>
@@ -53,17 +60,33 @@ export const CartSummary = () => {
         <Input
           placeholder="Promo code"
           value={code}
-          onChange={(event) => setCode(event.target.value)}
+          onChange={(event) => {
+            setCode(event.target.value);
+            if (error) {
+              setError("");
+            }
+          }}
           error={error}
         />
-        <Button variant="secondary" onClick={handleApply}>
+        <Button
+          variant="secondary"
+          onClick={handleApply}
+          disabled={isApplyDisabled}
+        >
           Apply
         </Button>
       </div>
       {coupon ? (
-        <p className={styles["summary__applied"]}>
-          Applied coupon: {coupon.code}
-        </p>
+        <div className={styles["summary__applied"]}>
+          <p>Applied coupon: {coupon.code}</p>
+          <Button
+            variant="link"
+            size="sm"
+            onClick={() => applyCoupon(null)}
+          >
+            Remove
+          </Button>
+        </div>
       ) : null}
     </section>
   );

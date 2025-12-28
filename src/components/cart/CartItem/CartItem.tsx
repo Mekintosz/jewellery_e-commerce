@@ -2,6 +2,7 @@ import styles from "./CartItem.module.css";
 import { CartItem as CartItemType } from "../../../types/cart";
 import { createVariantKey, useCart } from "../../../context/CartContext";
 import { formatCurrency } from "../../../utils/currency";
+import { formatVariantLabel } from "../utils";
 
 type CartItemProps = {
   item: CartItemType;
@@ -10,6 +11,21 @@ type CartItemProps = {
 export const CartItem = ({ item }: CartItemProps) => {
   const { updateQuantity, removeItem } = useCart();
   const key = createVariantKey(item.variant);
+  const variantLabel = formatVariantLabel(item.variant);
+  const isDecreaseDisabled = item.quantity <= 1;
+  const isIncreaseDisabled = item.quantity >= item.maxQuantity;
+  const handleDecrease = () => {
+    if (isDecreaseDisabled) {
+      return;
+    }
+    updateQuantity(item.productId, key, item.quantity - 1);
+  };
+  const handleIncrease = () => {
+    if (isIncreaseDisabled) {
+      return;
+    }
+    updateQuantity(item.productId, key, item.quantity + 1);
+  };
 
   return (
     <article className={styles["cart-item"]}>
@@ -21,17 +37,15 @@ export const CartItem = ({ item }: CartItemProps) => {
       />
       <div className={styles["cart-item__details"]}>
         <h3 className={styles["cart-item__name"]}>{item.name}</h3>
-        <p className={styles["cart-item__variant"]}>
-          {item.variant.size ? `Size: ${item.variant.size}` : null}
-          {item.variant.color ? ` · Color: ${item.variant.color}` : null}
-        </p>
+        {variantLabel ? (
+          <p className={styles["cart-item__variant"]}>{variantLabel}</p>
+        ) : null}
         <div className={styles["cart-item__controls"]}>
           <div className={styles["cart-item__quantity"]}>
             <button
               type="button"
-              onClick={() =>
-                updateQuantity(item.productId, key, item.quantity - 1)
-              }
+              disabled={isDecreaseDisabled}
+              onClick={handleDecrease}
               aria-label="Decrease quantity"
             >
               -
@@ -39,9 +53,8 @@ export const CartItem = ({ item }: CartItemProps) => {
             <span>{item.quantity}</span>
             <button
               type="button"
-              onClick={() =>
-                updateQuantity(item.productId, key, item.quantity + 1)
-              }
+              disabled={isIncreaseDisabled}
+              onClick={handleIncrease}
               aria-label="Increase quantity"
             >
               +

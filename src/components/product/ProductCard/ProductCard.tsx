@@ -14,12 +14,18 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const { isInWishlist, toggleItem } = useWishlist();
   const inWishlist = isInWishlist(product.id);
 
+  // Guard against empty variant arrays
+  const hasValidSize = product.variants.size && product.variants.size.length > 0;
+  const hasValidColor = product.variants.color && product.variants.color.length > 0;
+  const hasValidVariants = hasValidSize && hasValidColor;
+
   const defaultVariant = {
-    size: product.variants.size[0],
-    color: product.variants.color[0],
+    size: hasValidSize ? product.variants.size[0] : undefined,
+    color: hasValidColor ? product.variants.color[0] : undefined,
   };
 
   const handleAddToCart = () => {
+    if (!hasValidVariants) return;
     addItem(product, { quantity: 1, variant: defaultVariant });
   };
 
@@ -41,9 +47,13 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           type="button"
           className={styles["card__cta"]}
           onClick={handleAddToCart}
-          disabled={!product.inStock}
+          disabled={!product.inStock || !hasValidVariants}
         >
-          {product.inStock ? "Add to Cart" : "Sold Out"}
+          {!product.inStock
+            ? "Sold Out"
+            : !hasValidVariants
+            ? "Unavailable"
+            : "Add to Cart"}
         </button>
         <button
           type="button"

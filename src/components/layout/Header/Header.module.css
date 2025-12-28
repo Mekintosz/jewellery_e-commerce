@@ -1,9 +1,9 @@
 .header {
   position: sticky;
   inset-block-start: 0;
-  z-index: 1000;
+  z-index: 10;
   backdrop-filter: blur(8px);
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: rgba(255, 255, 255, 0.92);
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -135,14 +135,14 @@
 }
 
 .header__avatar {
-  width: 2.1rem;
-  height: 2.1rem;
-  border-radius: 999px;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 100%;
   display: grid;
   place-items: center;
   background-color: var(--color-primary);
-  color: #ffffff;
-  font-weight: 500;
+  color: var( --color-text-on-primary);
+  font-weight: 600;
   letter-spacing: 0.1em;
 }
 
@@ -172,5 +172,5 @@
 
 .header__signin:hover {
   background-color: var(--color-primary);
-  color: #ffffff;
+  color: var( --color-text-on-primary);
 }
