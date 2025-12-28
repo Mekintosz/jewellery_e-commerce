@@ -3,8 +3,10 @@ import {
   ReactNode,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useReducer,
+  useRef,
 } from "react";
 import { CartItem, CartSummary, Coupon } from "../types/cart";
 import { Product } from "../types/product";
@@ -23,7 +25,8 @@ type CartAction =
       payload: { productId: string; variantKey: string; quantity: number };
     }
   | { type: "CLEAR_CART" }
-  | { type: "APPLY_COUPON"; payload: Coupon | null };
+  | { type: "APPLY_COUPON"; payload: Coupon | null }
+  | { type: "HYDRATE"; payload: CartState };
 
 type CartContextValue = {
   items: CartItem[];
@@ -108,6 +111,8 @@ const reduceCart = (state: CartState, action: CartAction): CartState => {
       return { items: [], coupon: null };
     case "APPLY_COUPON":
       return { ...state, coupon: action.payload };
+    case "HYDRATE":
+      return action.payload;
     default:
       return state;
   }
@@ -146,26 +151,25 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const [state, dispatch] = useReducer(reduceCart, storedCart);
+  const lastPersistedRef = useRef(state);
 
-  const persist = useCallback(
-    (nextState: CartState) => {
-      setValue(nextState);
-      return nextState;
-    },
-    [setValue],
-  );
+  // Persist cart state to localStorage after every state change
+  useEffect(() => {
+    lastPersistedRef.current = state;
+    setValue(state);
+  }, [state, setValue]);
 
-  const dispatchAndPersist = useCallback(
-    (action: CartAction) => {
-      const nextState = reduceCart(state, action);
-      persist(nextState);
-      dispatch(action);
-    },
-    [persist, state],
-  );
+  // Sync cart state when localStorage changes (e.g., from another tab)
+  useEffect(() => {
+    // Only hydrate if storedCart is different from what we last persisted
+    // This prevents loops while enabling cross-tab sync
+    if (storedCart !== lastPersistedRef.current) {
+      dispatch({ type: "HYDRATE", payload: storedCart });
+    }
+  }, [storedCart]);
 
-  const actions = useMemo(() => {
-    const addItem = (
+  const addItem = useCallback(
+    (
       product: Product,
       item: Omit<
         CartItem,
@@ -181,43 +185,41 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         maxQuantity: product.stockQuantity,
         ...item,
       };
-      dispatchAndPersist({ type: "ADD_ITEM", payload });
-    };
+      dispatch({ type: "ADD_ITEM", payload });
+    },
+    [dispatch],
+  );
 
-    const removeItem = (productId: string, key: string) => {
-      dispatchAndPersist({
+  const removeItem = useCallback(
+    (productId: string, key: string) => {
+      dispatch({
         type: "REMOVE_ITEM",
         payload: { productId, variantKey: key },
       });
-    };
+    },
+    [dispatch],
+  );
 
-    const updateQuantity = (
-      productId: string,
-      key: string,
-      quantity: number,
-    ) => {
-      dispatchAndPersist({
+  const updateQuantity = useCallback(
+    (productId: string, key: string, quantity: number) => {
+      dispatch({
         type: "UPDATE_QUANTITY",
         payload: { productId, variantKey: key, quantity },
       });
-    };
+    },
+    [dispatch],
+  );
 
-    const applyCoupon = (coupon: Coupon | null) => {
-      dispatchAndPersist({ type: "APPLY_COUPON", payload: coupon });
-    };
+  const applyCoupon = useCallback(
+    (coupon: Coupon | null) => {
+      dispatch({ type: "APPLY_COUPON", payload: coupon });
+    },
+    [dispatch],
+  );
 
-    const clearCart = () => {
-      dispatchAndPersist({ type: "CLEAR_CART" });
-    };
-
-    return {
-      addItem,
-      removeItem,
-      updateQuantity,
-      applyCoupon,
-      clearCart,
-    };
-  }, [dispatchAndPersist]);
+  const clearCart = useCallback(() => {
+    dispatch({ type: "CLEAR_CART" });
+  }, [dispatch]);
 
   const summary = useMemo(
     () => calculateSummary(state.items, state.coupon),
@@ -229,9 +231,22 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       items: state.items,
       coupon: state.coupon,
       summary,
-      ...actions,
+      addItem,
+      removeItem,
+      updateQuantity,
+      applyCoupon,
+      clearCart,
     }),
-    [actions, state.coupon, state.items, summary],
+    [
+      addItem,
+      applyCoupon,
+      clearCart,
+      removeItem,
+      state.coupon,
+      state.items,
+      summary,
+      updateQuantity,
+    ],
   );
 
   return (
