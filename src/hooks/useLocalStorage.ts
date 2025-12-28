@@ -15,16 +15,17 @@ export const useLocalStorage = <T>(
 ) => {
   const { serializer = defaultSerializer, deserializer = defaultDeserializer } =
     options;
+  const initialValueRef = useRef(initialValue);
   const [storedValue, setStoredValue] = useState<T>(() => {
     if (typeof window === "undefined") {
-      return initialValue;
+      return initialValueRef.current;
     }
 
     try {
       const item = window.localStorage.getItem(key);
-      return item ? deserializer(item) : initialValue;
+      return item ? deserializer(item) : initialValueRef.current;
     } catch {
-      return initialValue;
+      return initialValueRef.current;
     }
   });
 
@@ -48,6 +49,35 @@ export const useLocalStorage = <T>(
     }
   }, [key, serializer, storedValue]);
 
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const handleStorage = (event: StorageEvent) => {
+      if (event.storageArea !== window.localStorage || event.key !== key) {
+        return;
+      }
+
+      if (event.newValue === null) {
+        setStoredValue(initialValueRef.current);
+        return;
+      }
+
+      try {
+        const nextValue = deserializer(event.newValue);
+        setStoredValue(nextValue);
+      } catch {
+        setStoredValue(initialValueRef.current);
+      }
+    };
+
+    window.addEventListener("storage", handleStorage);
+    return () => {
+      window.removeEventListener("storage", handleStorage);
+    };
+  }, [deserializer, key]);
+
   const remove = useCallback(() => {
     if (typeof window === "undefined") {
       return;
@@ -55,11 +85,10 @@ export const useLocalStorage = <T>(
 
     try {
       window.localStorage.removeItem(key);
-      setStoredValue(initialValue);
     } catch {
-      setStoredValue(initialValue);
     }
-  }, [initialValue, key]);
+    setStoredValue(initialValueRef.current);
+  }, [key]);
 
   return {
     value: storedValue,
