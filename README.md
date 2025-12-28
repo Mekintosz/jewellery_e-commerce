@@ -1,4 +1,4 @@
-# Jewellery E-Commerce
+# Jewells_e-commerce
 
 Responsive jewellery e-commerce experience built with React 19 and Vite. The application showcases a premium storefront with end-to-end shopping flows, authentication scaffolding, modular CSS styling, and reusable UI primitives.
 
