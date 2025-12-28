@@ -1,5 +1,5 @@
 import { lazy } from "react";
-import { Navigate, useRoutes } from "react-router-dom";
+import { useRoutes } from "react-router-dom";
 import { MainLayout } from "../layouts/MainLayout/MainLayout";
 import { ProtectedRoute } from "./ProtectedRoute";
 
@@ -25,6 +25,7 @@ const UserProfilePage = lazy(
 );
 const WishlistPage = lazy(() => import("../pages/WishlistPage/WishlistPage"));
 const LoginPage = lazy(() => import("../pages/LoginPage/LoginPage"));
+const NotFoundPage = lazy(() => import("../pages/NotFoundPage/NotFoundPage"));
 
 export const AppRoutes = () => {
   const routing = useRoutes([
@@ -56,7 +57,7 @@ export const AppRoutes = () => {
         },
         { path: "wishlist", element: <WishlistPage /> },
         { path: "login", element: <LoginPage /> },
-        { path: "*", element: <Navigate to="/" replace /> },
+        { path: "*", element: <NotFoundPage /> },
       ],
     },
   ]);
