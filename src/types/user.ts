@@ -29,10 +29,3 @@ export type UserProfile = {
   paymentMethods: PaymentMethod[];
   wishlist: string[];
 };
-
-export type AuthState = {
-  isAuthenticated: boolean;
-  token: string | null;
-  user: UserProfile | null;
-  isLoading: boolean;
-};

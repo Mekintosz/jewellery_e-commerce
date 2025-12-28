@@ -6,9 +6,21 @@ import {
   useMemo,
   useState,
 } from "react";
-import { AuthState, UserProfile } from "../types/user";
+import { UserProfile } from "../types/user";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { authService } from "../services/authService";
+
+// Persisted auth data (stored in localStorage)
+type PersistedAuthData = {
+  isAuthenticated: boolean;
+  token: string | null;
+  user: UserProfile | null;
+};
+
+// Full auth state including transient UI state
+type AuthState = PersistedAuthData & {
+  isLoading: boolean;
+};
 
 type AuthContextValue = AuthState & {
   login: (email: string, password: string) => Promise<void>;
@@ -21,89 +33,80 @@ const AUTH_STORAGE_KEY = "jewellery-auth";
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  // Single source of truth for persisted data
   const {
-    value: storedAuth,
-    setValue,
-    remove,
-  } = useLocalStorage<AuthState>(AUTH_STORAGE_KEY, {
+    value: authData,
+    setValue: setAuthData,
+    remove: removeAuthData,
+  } = useLocalStorage<PersistedAuthData>(AUTH_STORAGE_KEY, {
     isAuthenticated: false,
     token: null,
     user: null,
-    isLoading: false,
   });
 
-  const [state, setState] = useState<AuthState>(storedAuth);
-
-  const syncState = useCallback(
-    (nextState: AuthState) => {
-      setValue(nextState);
-      setState(nextState);
-    },
-    [setValue],
-  );
+  // Separate ephemeral UI state (not persisted)
+  const [isLoading, setIsLoading] = useState(false);
 
   const login = useCallback(
     async (email: string, password: string) => {
-      syncState({ ...state, isLoading: true });
+      setIsLoading(true);
       try {
         const { token, user } = await authService.login(email, password);
-        const nextState: AuthState = {
+        // Functional update to avoid stale state
+        setAuthData({
           isAuthenticated: true,
           token,
           user,
-          isLoading: false,
-        };
-        syncState(nextState);
+        });
       } catch (error) {
-        syncState({
-          ...state,
+        // Functional update to avoid stale state
+        setAuthData({
           isAuthenticated: false,
           token: null,
           user: null,
-          isLoading: false,
         });
         throw error;
+      } finally {
+        setIsLoading(false);
       }
     },
-    [state, syncState],
+    [setAuthData],
   );
 
   const logout = useCallback(() => {
-    remove();
-    setState({
-      isAuthenticated: false,
-      token: null,
-      user: null,
-      isLoading: false,
-    });
-  }, [remove]);
+    removeAuthData();
+    setIsLoading(false);
+  }, [removeAuthData]);
 
   const refreshProfile = useCallback(async () => {
-    if (!state.token) {
+    if (!authData.token) {
       return;
     }
 
-    syncState({ ...state, isLoading: true });
+    setIsLoading(true);
     try {
-      const profile: UserProfile = await authService.me(state.token);
-      syncState({
-        ...state,
+      const profile: UserProfile = await authService.me(authData.token);
+      // Functional update to avoid stale state
+      setAuthData((prev) => ({
+        ...prev,
         user: profile,
-        isLoading: false,
-      });
+      }));
     } catch {
       logout();
+    } finally {
+      setIsLoading(false);
     }
-  }, [logout, state, syncState]);
+  }, [authData.token, logout, setAuthData]);
 
   const value = useMemo<AuthContextValue>(
     () => ({
-      ...state,
+      ...authData,
+      isLoading,
       login,
       logout,
       refreshProfile,
     }),
-    [login, logout, refreshProfile, state],
+    [authData, isLoading, login, logout, refreshProfile],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
